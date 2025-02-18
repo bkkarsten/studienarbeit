@@ -11,10 +11,11 @@ set(CMAKE_BUILD_TYPE Release)
 
 find_package(Qt6 REQUIRED COMPONENTS Qml Quick Core Gui Widgets)
 
-#qt_add_resources(QRC_FILES qml/resources.qrc)
+qt_add_resources(QRC_FILES qml/resources.qrc)
 
 set(SOURCES
     main.cpp
+    src/MainWindow.cpp
 )
 
 add_executable(studar ${SOURCES})

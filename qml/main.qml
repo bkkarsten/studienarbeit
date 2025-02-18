@@ -15,22 +15,19 @@ ApplicationWindow {
             Action { text: "Save" }
             Action { text: "Save As" }
         }
-        Action {
-            text: "Review"
+        Menu {
+            title: "Review"
         }
     }
-
-
-    property var content: null
 
     Rectangle {
         width: parent.width
         height: parent.height
-        color:"lightgray"
 
         Loader {
+            id: loader
             anchors.fill: parent
-            sourceComponent: content
+            source: "qrc:/no_file.qml"
         }
     }
 }
