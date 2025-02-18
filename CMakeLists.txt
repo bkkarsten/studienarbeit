@@ -11,7 +11,7 @@ set(CMAKE_BUILD_TYPE Release)
 
 find_package(Qt6 REQUIRED COMPONENTS Qml Quick Core Gui Widgets)
 
-#qt_add_resources(QRC_FILES resources.qrc)
+#qt_add_resources(QRC_FILES qml/resources.qrc)
 
 set(SOURCES
     main.cpp
