@@ -10,10 +10,22 @@ ApplicationWindow {
     menuBar: MenuBar {
         Menu {
             title: "File"
-            Action { text: "New" }
-            Action { text: "Open" }
-            Action { text: "Save" }
-            Action { text: "Save As" }
+            Action { 
+                text: "New" 
+                onTriggered: window.newFile()
+            }
+            Action { 
+                text: "Open" 
+                onTriggered: window.openFile()
+            }
+            Action { 
+                text: "Save" 
+                onTriggered: window.saveFile()
+            }
+            Action { 
+                text: "Save As" 
+                onTriggered: window.saveFileAs()
+            }
         }
         Menu {
             title: "Review"
@@ -26,6 +38,7 @@ ApplicationWindow {
 
         Loader {
             id: loader
+            objectName: "loader"
             anchors.fill: parent
             source: "qrc:/no_file.qml"
         }
