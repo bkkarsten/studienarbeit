@@ -5,6 +5,7 @@
 
 #include <QQmlApplicationEngine>
 #include <QFileDialog>
+#include <QMessageBox>
 
 
 /**
@@ -17,6 +18,8 @@ private:
     QQmlApplicationEngine engine;
     // File dialog configured to be used to open files
     QFileDialog openFileDialog;
+    // An object to show any error message
+    QMessageBox errorMessage;
     // The file which has been opened
     std::fstream openedFile;
     // Whether a graph is currently opened
@@ -30,6 +33,14 @@ private:
      * @brief Updates the window's core QML content based on whether a graph is opened and which.
      */
     void updateContent();
+    /**
+     * @brief Shows an error message box with the given message.
+     */
+    void showError(QString message);
+    /**
+     * @brief Shows a warning message box with the given message.
+     */
+    void showWarning(QString message);
 public:
     MainWindow();
     ~MainWindow();

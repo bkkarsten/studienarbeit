@@ -1,19 +1,22 @@
 #include "MainWindow.hpp"
+
+#include <iostream>
+
 #include <QQmlProperty>
 #include <QQmlContext>
-#include <iostream>
 
 MainWindow::MainWindow()
     : engine()
     , openFileDialog()
+    , errorMessage()
     , openedFile()
 {
     // Setup engine
     engine.rootContext()->setContextProperty("window", this);
     engine.load(QUrl("qrc:/main.qml"));
-
-    // exception werfen wenn rootObject empty
-
+    if (engine.rootObjects().isEmpty()) {
+        throw std::runtime_error("Root object not found.");
+    }
 
     // Configure file dialogs
     openFileDialog.setFileMode(QFileDialog::ExistingFile);
@@ -27,12 +30,15 @@ MainWindow::~MainWindow() {
 void MainWindow::setContent(QString source) {
     QObject* rootObject = engine.rootObjects().first();
     if (!rootObject) {
+        showError("Root object not found.");
         return;
     }
     QObject* contentLoader = rootObject->findChild<QObject*>("loader");
-    if (contentLoader) {
-        QQmlProperty::write(contentLoader, "source", source);
+    if (!contentLoader) {
+        showWarning("Content loader not found.");
+        return;
     }
+    QQmlProperty::write(contentLoader, "source", source);
 }
 
 void MainWindow::updateContent() {
@@ -44,13 +50,29 @@ void MainWindow::updateContent() {
     }
 }
 
+void MainWindow::showError(QString message) {
+    errorMessage.setIcon(QMessageBox::Critical);
+    errorMessage.setWindowTitle(tr("Error"));
+    errorMessage.setText(message);
+    errorMessage.exec();
+}
+
+void MainWindow::showWarning(QString message) {
+    errorMessage.setIcon(QMessageBox::Warning);
+    errorMessage.setWindowTitle(tr("Warning"));
+    errorMessage.setText(message);
+    errorMessage.exec();
+}
+
 void MainWindow::openFile() {
     if(!openFileDialog.exec()) {
+        showError("Error opening file.");
         return;
     }
     QStringList fileNames = openFileDialog.selectedFiles();
     openedFile.open(fileNames.first().toStdString());
     if(!openedFile) {
+        showError("Error opening file.");
         return;
     }
     openedGraph = true;
