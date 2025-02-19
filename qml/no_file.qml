@@ -1,5 +1,8 @@
 import QtQuick
 
+/**
+ * Simple QML content that informs the user that no graph (file) has been opened yet.
+ */
 Rectangle {
     width: parent.width
     height: parent.height

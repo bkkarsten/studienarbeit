@@ -1,6 +1,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+/**
+ * The main application window. It includes a menu bar and a loader which loads content from another 
+ * QML file depending on the applications context.
+ */
 ApplicationWindow {
     visible: true
     width: 800
