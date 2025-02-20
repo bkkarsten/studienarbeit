@@ -146,7 +146,6 @@ void MainWindow::openFile() {
 void MainWindow::newFile() {
     SAVE_PROMPT_GUARD(
         openedFile.close();
-        openedFile.clear();
         openedFileName.clear();
         openedGraph = true;
         unsavedChanges = false;
@@ -200,4 +199,9 @@ void MainWindow::saveGraph() {
     std::cout << "saved" << std::endl;
 
     // TODO
+}
+
+bool MainWindow::checkClose() {
+    SAVE_PROMPT_GUARD(return true;)
+    return false;
 }

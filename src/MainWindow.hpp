@@ -97,6 +97,13 @@ public:
      * Called when clicking File->Save As in the menu bar. 
      */
     Q_INVOKABLE void saveFileAs();
+    /**
+     * @brief This will check for unsaved changes, open a save dialog if necessary, and then return whether the dialog was canceled.
+     * @return false if cancel was clicked, true otherwise
+     * 
+     * Called when closing the window.
+     */
+    Q_INVOKABLE bool checkClose();
 };
 
 #endif

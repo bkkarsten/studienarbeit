@@ -11,6 +11,8 @@ ApplicationWindow {
     height: 600
     title: ""
 
+    onClosing: (event) => event.accepted = window.checkClose();
+
     menuBar: MenuBar {
         Menu {
             title: "File"
