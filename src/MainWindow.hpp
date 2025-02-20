@@ -24,6 +24,8 @@ private:
     std::fstream openedFile;
     // Whether a graph is currently opened
     bool openedGraph = false;
+    // Whether there are any unsaved changes
+    bool unsavedChanges = false;
     /**
      * @brief Sets the window's core QML content.
      * @param source The qml file to load
@@ -44,6 +46,11 @@ private:
 public:
     MainWindow();
     ~MainWindow();
+
+    /**
+     * @brief Lets the main window know that changes have been made to the opened graph.
+     */
+    Q_INVOKABLE void registerChanges();
     /**
      * @brief Creates a new graph. 
      * 

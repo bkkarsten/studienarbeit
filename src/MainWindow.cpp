@@ -64,6 +64,10 @@ void MainWindow::showWarning(QString message) {
     errorMessage.exec();
 }
 
+void MainWindow::registerChanges() {
+    unsavedChanges = true;
+}
+
 void MainWindow::openFile() {
     if(!openFileDialog.exec()) {
         showError("Error opening file.");
