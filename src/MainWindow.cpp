@@ -23,7 +23,7 @@
         code \
     } 
 
-MainWindow::MainWindow()
+MainWindow::MainWindow(QString defaultDir)
     : engine()
     , openFileDialog()
     , saveAsDialog()
@@ -44,6 +44,10 @@ MainWindow::MainWindow()
     saveAsDialog.setFileMode(QFileDialog::AnyFile);
     saveAsDialog.setNameFilter(tr("GraphML File (*.graphml)"));
     saveAsDialog.setAcceptMode(QFileDialog::AcceptSave);
+    if(!defaultDir.isEmpty()) {
+        openFileDialog.setDirectory(QDir(defaultDir));
+        saveAsDialog.setDirectory(QDir(defaultDir));
+    }
 
     // Confige save prompt dialog
     savePrompt.setWindowTitle(tr("Unsaved Changes"));

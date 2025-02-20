@@ -52,7 +52,11 @@ private:
      */
     void saveGraph();
 public:
-    MainWindow();
+    /**
+     * @brief Constructs the main window.
+     * @param defaultDir The default directory to open file dialogs in. If empty, will open in the executable's directory.
+     */ 
+    MainWindow(QString defaultDir = "");
     ~MainWindow();
 
     /**

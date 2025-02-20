@@ -1,0 +1,1 @@
+#define GRAPH_DIRECTORY "KnowledgeGraphs"

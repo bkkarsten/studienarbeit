@@ -1,13 +1,16 @@
 #include <QApplication>
-#include "src/MainWindow.hpp"
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
+
+#include "MainWindow.hpp"
+#include "initialiseDirectory.hpp"
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
     QQuickStyle::setStyle("Material");
     
-    MainWindow window;
+    QString dir = initialiseDirectory();
+    MainWindow window(dir);
 
     return app.exec();
 }
