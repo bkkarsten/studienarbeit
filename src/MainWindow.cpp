@@ -1,4 +1,5 @@
 #include "MainWindow.hpp"
+#include "config.hpp"
 
 #include <iostream>
 
@@ -30,6 +31,7 @@ MainWindow::MainWindow(QString defaultDir)
     , errorMessage()
     , savePrompt()
     , openedFile()
+    , openedFileName()
 {
     // Setup engine
     engine.rootContext()->setContextProperty("window", this);
@@ -37,6 +39,8 @@ MainWindow::MainWindow(QString defaultDir)
     if (engine.rootObjects().isEmpty()) {
         throw std::runtime_error("Root object not found.");
     }
+    qmlWindow = qobject_cast<QQuickWindow*>(engine.rootObjects().first());
+    qmlWindow->setTitle(WINDOW_TITLE);
 
     // Configure file dialogs
     openFileDialog.setFileMode(QFileDialog::ExistingFile);
@@ -86,6 +90,21 @@ void MainWindow::updateContent() {
     }
 }
 
+QString MainWindow::updateWindowTitle() {
+    QString newTitle = QString(WINDOW_TITLE);
+    if(openedGraph) {
+        newTitle.append(" - ");
+        newTitle.append(openedFileName.isEmpty()? tr("unsaved Graph") : openedFileName.split("/").last());
+    }
+    if(unsavedChanges) {
+        newTitle.append("*");
+    }
+    qmlWindow->setTitle(newTitle);
+    return newTitle;
+    
+
+}
+
 void MainWindow::showError(QString message) {
     errorMessage.setIcon(QMessageBox::Critical);
     errorMessage.setWindowTitle(tr("Error"));
@@ -102,6 +121,7 @@ void MainWindow::showWarning(QString message) {
 
 void MainWindow::registerChanges() {
     unsavedChanges = true;
+    updateWindowTitle();
 }
 
 void MainWindow::openFile() {
@@ -109,13 +129,16 @@ void MainWindow::openFile() {
         if(!openFileDialog.exec()) {
             return;
         }
-        QStringList fileNames = openFileDialog.selectedFiles();
-        openedFile.open(fileNames.first().toStdString());
-        if(!openedFile) {
-            showError("Error opening file.");
+        std::string fileName = openFileDialog.selectedFiles().first().toStdString();
+        std::fstream tempFile(fileName);
+        if(!tempFile) {
+            showError("Error opening new file.");
             return;
         }
+        openedFile = std::move(tempFile);
+        openedFileName = QString::fromStdString(fileName);
         openedGraph = true;
+        updateWindowTitle();
         updateContent();
     )
 }
@@ -123,11 +146,14 @@ void MainWindow::openFile() {
 void MainWindow::newFile() {
     SAVE_PROMPT_GUARD(
         openedFile.close();
+        openedFile.clear();
+        openedFileName.clear();
         openedGraph = true;
         unsavedChanges = false;
-
+        std::cout << "new" << std::endl;
         // TODO
 
+        updateWindowTitle();
         updateContent();
     )
 }
@@ -164,11 +190,13 @@ void MainWindow::saveFileAs() {
         return;
     }
     openedFile = std::move(tempFile);
+    openedFileName = QString::fromStdString(fileName);
     saveGraph();
 }
 
 void MainWindow::saveGraph() {
     unsavedChanges = false;
+    updateWindowTitle();
     std::cout << "saved" << std::endl;
 
     // TODO

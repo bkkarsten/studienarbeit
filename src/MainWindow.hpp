@@ -6,6 +6,7 @@
 #include <QQmlApplicationEngine>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QQuickWindow>
 
 
 /**
@@ -16,6 +17,8 @@ class MainWindow : public QObject {
 private:
     // QML engine
     QQmlApplicationEngine engine;
+    // The ApplicationWindow defined in QML
+    QQuickWindow* qmlWindow;
     // File dialog configured to be used to open files
     QFileDialog openFileDialog;
     // File dialog configured to be used to save files
@@ -26,6 +29,8 @@ private:
     QMessageBox savePrompt;
     // The file which has been opened
     std::fstream openedFile;
+    // The name of the file which has been opened
+    QString openedFileName;
     // Whether a graph is currently opened
     bool openedGraph = false;
     // Whether there are any unsaved changes
@@ -39,6 +44,11 @@ private:
      * @brief Updates the window's core QML content based on whether a graph is opened and which.
      */
     void updateContent();
+    /**
+     * @brief Updates the window's title based on the opened file.
+     * @return The new window title.
+     */
+    QString updateWindowTitle();
     /**
      * @brief Shows an error message box with the given message.
      */
