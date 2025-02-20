@@ -20,6 +20,8 @@ private:
     QFileDialog openFileDialog;
     // An object to show any error message
     QMessageBox errorMessage;
+    // An object to show a prompt to save changes
+    QMessageBox savePrompt;
     // The file which has been opened
     std::fstream openedFile;
     // Whether a graph is currently opened
