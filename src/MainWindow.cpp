@@ -26,6 +26,7 @@
 MainWindow::MainWindow()
     : engine()
     , openFileDialog()
+    , saveAsDialog()
     , errorMessage()
     , savePrompt()
     , openedFile()
@@ -40,6 +41,9 @@ MainWindow::MainWindow()
     // Configure file dialogs
     openFileDialog.setFileMode(QFileDialog::ExistingFile);
     openFileDialog.setNameFilter(tr("GraphML File (*.graphml)"));
+    saveAsDialog.setFileMode(QFileDialog::AnyFile);
+    saveAsDialog.setNameFilter(tr("GraphML File (*.graphml)"));
+    saveAsDialog.setAcceptMode(QFileDialog::AcceptSave);
 
     // Confige save prompt dialog
     savePrompt.setWindowTitle(tr("Unsaved Changes"));
@@ -99,7 +103,6 @@ void MainWindow::registerChanges() {
 void MainWindow::openFile() {
     SAVE_PROMPT_GUARD(
         if(!openFileDialog.exec()) {
-            showError("Error opening file.");
             return;
         }
         QStringList fileNames = openFileDialog.selectedFiles();
@@ -126,10 +129,43 @@ void MainWindow::newFile() {
 }
 
 void MainWindow::saveFile() {
+    if(!openedGraph) {
+        return;
+    }
+    if(openedFile) {
+        saveGraph();
+    }
+    else {
+        saveFileAs();
+    }
+}
+
+void MainWindow::saveFileAs() {
+    if(!openedGraph) {
+        return;
+    }
+    if(!saveAsDialog.exec()) {
+        return;
+    }
+    std::string fileName = saveAsDialog.selectedFiles().first().toStdString();
+    std::ofstream createFile(fileName);
+    if(!createFile) {
+        showError("Error creating file.");
+        return;
+    }
+    createFile.close();
+    std::fstream tempFile(fileName);
+    if(!tempFile) {
+        showError("Error opening new file.");
+        return;
+    }
+    openedFile = std::move(tempFile);
+    saveGraph();
+}
+
+void MainWindow::saveGraph() {
     unsavedChanges = false;
     std::cout << "saved" << std::endl;
 
-    // TODO!
+    // TODO
 }
-
-void MainWindow::saveFileAs() {}

@@ -18,6 +18,8 @@ private:
     QQmlApplicationEngine engine;
     // File dialog configured to be used to open files
     QFileDialog openFileDialog;
+    // File dialog configured to be used to save files
+    QFileDialog saveAsDialog;
     // An object to show any error message
     QMessageBox errorMessage;
     // An object to show a prompt to save changes
@@ -45,6 +47,10 @@ private:
      * @brief Shows a warning message box with the given message.
      */
     void showWarning(QString message);
+    /**
+     * @brief Saves the graph to openedFile.
+     */
+    void saveGraph();
 public:
     MainWindow();
     ~MainWindow();
