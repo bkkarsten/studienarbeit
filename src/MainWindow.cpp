@@ -162,7 +162,7 @@ void MainWindow::saveFile() {
     if(!openedGraph) {
         return;
     }
-    if(openedFile) {
+    if(openedFile.is_open()) {
         saveGraph();
     }
     else {
