@@ -1,11 +1,10 @@
 #include "WindowManager.hpp"
 #include "config.hpp"
 
-#include <iostream>
-
 #include <QQmlProperty>
 #include <QQmlContext>
 #include <QPushButton>
+#include <QDebug>
 
 /**
  * @brief If there are any unsaved changes, this will open a save dialog and execute the given code 
@@ -149,9 +148,9 @@ void WindowManager::newFile() {
         openedFileName.clear();
         openedGraph = true;
         unsavedChanges = false;
-        std::cout << "new" << std::endl;
+        
         // TODO
-
+        
         updateWindowTitle();
         updateContent();
     )
@@ -196,7 +195,6 @@ void WindowManager::saveFileAs() {
 void WindowManager::saveGraph() {
     unsavedChanges = false;
     updateWindowTitle();
-    std::cout << "saved" << std::endl;
 
     // TODO
 }
