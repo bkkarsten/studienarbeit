@@ -98,6 +98,12 @@ public:
      */
     Q_INVOKABLE void saveFileAs();
     /**
+     * @brief Closes the open graph.
+     * 
+     * Called when clicking File->Close in the menu bar.
+     */
+    Q_INVOKABLE void closeFile();
+    /**
      * @brief This will check for unsaved changes, open a save dialog if necessary, and then return whether the dialog was canceled.
      * @return false if cancel was clicked, true otherwise
      * 

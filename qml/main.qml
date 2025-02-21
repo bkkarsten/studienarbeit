@@ -32,6 +32,10 @@ ApplicationWindow {
                 text: "Save As" 
                 onTriggered: manager.saveFileAs()
             }
+            Action {
+                text: "Close"
+                onTriggered: manager.closeFile()
+            }
         }
         Menu {
             title: "Review"

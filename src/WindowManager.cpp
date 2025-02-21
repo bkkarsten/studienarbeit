@@ -201,6 +201,17 @@ void WindowManager::saveGraph() {
     // TODO
 }
 
+void WindowManager::closeFile() {
+    SAVE_PROMPT_GUARD(
+        openedFile.close();
+        openedFileName.clear();
+        openedGraph = false;
+        unsavedChanges = false;
+        updateWindowTitle();
+        updateContent();
+    )
+}
+
 bool WindowManager::checkClose() {
     SAVE_PROMPT_GUARD(return true;)
     return false;
