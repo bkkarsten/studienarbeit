@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef WINDOWMANAGER_H
+#define WINDOWMANAGER_H
 
 #include <fstream>
 
@@ -12,7 +12,7 @@
 /**
  * @brief Main window of the application which handles the QML
  */
-class MainWindow : public QObject {
+class WindowManager : public QObject {
     Q_OBJECT
 private:
     // QML engine
@@ -66,8 +66,8 @@ public:
      * @brief Constructs the main window.
      * @param defaultDir The default directory to open file dialogs in. If empty, will open in the executable's directory.
      */ 
-    MainWindow(QString defaultDir = "");
-    ~MainWindow();
+    WindowManager(QString defaultDir = "");
+    ~WindowManager();
 
     /**
      * @brief Lets the main window know that changes have been made to the opened graph.

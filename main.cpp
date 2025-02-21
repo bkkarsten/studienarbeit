@@ -2,7 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
 
-#include "MainWindow.hpp"
+#include "WindowManager.hpp"
 #include "initialiseDirectory.hpp"
 
 int main(int argc, char *argv[]) {
@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
     QQuickStyle::setStyle("Material");
     
     QString dir = initialiseDirectory();
-    MainWindow window(dir);
+    WindowManager manager(dir);
 
     return app.exec();
 }

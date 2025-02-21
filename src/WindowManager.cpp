@@ -1,4 +1,4 @@
-#include "MainWindow.hpp"
+#include "WindowManager.hpp"
 #include "config.hpp"
 
 #include <iostream>
@@ -24,7 +24,7 @@
         code \
     } 
 
-MainWindow::MainWindow(QString defaultDir)
+WindowManager::WindowManager(QString defaultDir)
     : engine()
     , openFileDialog()
     , saveAsDialog()
@@ -34,7 +34,7 @@ MainWindow::MainWindow(QString defaultDir)
     , openedFileName()
 {
     // Setup engine
-    engine.rootContext()->setContextProperty("window", this);
+    engine.rootContext()->setContextProperty("manager", this);
     engine.load(QUrl("qrc:/main.qml"));
     if (engine.rootObjects().isEmpty()) {
         throw std::runtime_error("Root object not found.");
@@ -59,15 +59,15 @@ MainWindow::MainWindow(QString defaultDir)
     savePrompt.setText(tr("There are unsaved changes. How will you proceed?"));
     savePrompt.addButton(QMessageBox::Cancel);
     QPushButton* saveButton = savePrompt.addButton(QMessageBox::Save);
-    connect(saveButton, &QPushButton::clicked, this, &MainWindow::saveFile);
+    connect(saveButton, &QPushButton::clicked, this, &WindowManager::saveFile);
     savePrompt.addButton(QMessageBox::Discard);
 }
 
-MainWindow::~MainWindow() {
+WindowManager::~WindowManager() {
     openedFile.close();
 }
 
-void MainWindow::setContent(QString source) {
+void WindowManager::setContent(QString source) {
     QObject* rootObject = engine.rootObjects().first();
     if (!rootObject) {
         showError("Root object not found.");
@@ -81,7 +81,7 @@ void MainWindow::setContent(QString source) {
     QQmlProperty::write(contentLoader, "source", source);
 }
 
-void MainWindow::updateContent() {
+void WindowManager::updateContent() {
     if(openedGraph) {
         setContent("qrc:/file_loaded_placeholder.qml");
     }
@@ -90,7 +90,7 @@ void MainWindow::updateContent() {
     }
 }
 
-QString MainWindow::updateWindowTitle() {
+QString WindowManager::updateWindowTitle() {
     QString newTitle = QString(WINDOW_TITLE);
     if(openedGraph) {
         newTitle.append(" - ");
@@ -105,26 +105,26 @@ QString MainWindow::updateWindowTitle() {
 
 }
 
-void MainWindow::showError(QString message) {
+void WindowManager::showError(QString message) {
     errorMessage.setIcon(QMessageBox::Critical);
     errorMessage.setWindowTitle(tr("Error"));
     errorMessage.setText(message);
     errorMessage.exec();
 }
 
-void MainWindow::showWarning(QString message) {
+void WindowManager::showWarning(QString message) {
     errorMessage.setIcon(QMessageBox::Warning);
     errorMessage.setWindowTitle(tr("Warning"));
     errorMessage.setText(message);
     errorMessage.exec();
 }
 
-void MainWindow::registerChanges() {
+void WindowManager::registerChanges() {
     unsavedChanges = true;
     updateWindowTitle();
 }
 
-void MainWindow::openFile() {
+void WindowManager::openFile() {
     SAVE_PROMPT_GUARD(
         if(!openFileDialog.exec()) {
             return;
@@ -143,7 +143,7 @@ void MainWindow::openFile() {
     )
 }
 
-void MainWindow::newFile() {
+void WindowManager::newFile() {
     SAVE_PROMPT_GUARD(
         openedFile.close();
         openedFileName.clear();
@@ -157,7 +157,7 @@ void MainWindow::newFile() {
     )
 }
 
-void MainWindow::saveFile() {
+void WindowManager::saveFile() {
     if(!openedGraph) {
         return;
     }
@@ -169,7 +169,7 @@ void MainWindow::saveFile() {
     }
 }
 
-void MainWindow::saveFileAs() {
+void WindowManager::saveFileAs() {
     if(!openedGraph) {
         return;
     }
@@ -193,7 +193,7 @@ void MainWindow::saveFileAs() {
     saveGraph();
 }
 
-void MainWindow::saveGraph() {
+void WindowManager::saveGraph() {
     unsavedChanges = false;
     updateWindowTitle();
     std::cout << "saved" << std::endl;
@@ -201,7 +201,7 @@ void MainWindow::saveGraph() {
     // TODO
 }
 
-bool MainWindow::checkClose() {
+bool WindowManager::checkClose() {
     SAVE_PROMPT_GUARD(return true;)
     return false;
 }

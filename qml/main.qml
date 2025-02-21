@@ -11,26 +11,26 @@ ApplicationWindow {
     height: 600
     title: ""
 
-    onClosing: (event) => event.accepted = window.checkClose();
+    onClosing: (event) => event.accepted = manager.checkClose();
 
     menuBar: MenuBar {
         Menu {
             title: "File"
             Action { 
                 text: "New" 
-                onTriggered: window.newFile()
+                onTriggered: manager.newFile()
             }
             Action { 
                 text: "Open" 
-                onTriggered: window.openFile()
+                onTriggered: manager.openFile()
             }
             Action { 
                 text: "Save" 
-                onTriggered: window.saveFile()
+                onTriggered: manager.saveFile()
             }
             Action { 
                 text: "Save As" 
-                onTriggered: window.saveFileAs()
+                onTriggered: manager.saveFileAs()
             }
         }
         Menu {

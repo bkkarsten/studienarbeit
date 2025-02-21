@@ -9,7 +9,7 @@ Rectangle {
     Button {
         anchors.centerIn: parent
         text: "Make Changes"
-        onClicked: window.registerChanges()
+        onClicked: manager.registerChanges()
     }
 
     // Text {

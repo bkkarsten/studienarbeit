@@ -15,7 +15,7 @@ qt_add_resources(QRC_FILES qml/resources.qrc)
 
 set(SOURCES
     main.cpp
-    src/MainWindow.cpp
+    src/WindowManager.cpp
     src/initialiseDirectory.cpp
 )
 
