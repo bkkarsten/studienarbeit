@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>no_file.qml</file>
+        <file>file_loaded_placeholder.qml</file>
+    </qresource>
+</RCC>
