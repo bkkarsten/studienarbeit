@@ -17,6 +17,7 @@ set(SOURCES
     main.cpp
     src/WindowManager.cpp
     src/initialiseDirectory.cpp
+    src/Content.cpp
 )
 
 add_executable(studar ${SOURCES})
