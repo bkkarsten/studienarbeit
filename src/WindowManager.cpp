@@ -5,6 +5,7 @@
 #include <QQmlContext>
 #include <QPushButton>
 #include <QDebug>
+#include <QuickQanava>
 
 /**
  * @brief If there are any unsaved changes, this will open a save dialog and execute the given code 
@@ -38,6 +39,8 @@ WindowManager::WindowManager(QString defaultDir)
     if (engine.rootObjects().isEmpty()) {
         throw std::runtime_error("Root object not found.");
     }
+engine.addImportPath("external/QuickQanava/src");
+    QuickQanava::initialize(&engine);
     qmlWindow = qobject_cast<QQuickWindow*>(engine.rootObjects().first());
     qmlWindow->setTitle(WINDOW_TITLE);
 
@@ -82,7 +85,8 @@ void WindowManager::setContent(QString source) {
 
 void WindowManager::updateContent() {
     if(openedGraph) {
-        setContent("qrc:/file_loaded_placeholder.qml");
+        // setContent("qrc:/file_loaded_placeholder.qml");
+        setContent("qrc:/graphview.qml");
     }
     else {
         setContent("qrc:/no_file.qml");
