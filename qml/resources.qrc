@@ -6,5 +6,6 @@
         <file>graphview.qml</file>
         <file>ConceptNode.qml</file>
         <file>Content.qml</file>
+        <file>QuestionEdge.qml</file>
     </qresource>
 </RCC>

@@ -21,7 +21,7 @@ private:
 CONTENTOWNER(content, getContentItem);
 
 public:
-    Question();
+    Question() {};
     const QDateTime& getLastAnswered() const { return lastAnswered; }
     const QDateTime& getLastCorrectlyAnswered() const { return lastCorrectlyAnswered; }
     const QDateTime& getLastChanged() const { return lastChanged; }

@@ -10,6 +10,7 @@ class Question;
  */
 class EdgeBase : public qan::Edge {
 public:
+    EdgeBase(QObject* parent) : qan::Edge(parent) {}
     /**
      * @brief Returns the question that is associated with this.
      */

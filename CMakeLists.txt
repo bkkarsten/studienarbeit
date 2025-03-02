@@ -19,6 +19,7 @@ set(SOURCES
     src/initialiseDirectory.cpp
     src/Content.cpp
     src/ConceptNode.cpp
+    src/QuestionEdge.cpp
 )
 
 add_executable(studar ${SOURCES})
