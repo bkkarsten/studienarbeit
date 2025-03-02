@@ -1,24 +1,11 @@
 #include "Content.hpp"
 
 #include <QRegularExpression>
-#include <QList>
+#include <QMetaObject>
 
-#include <utility>
-
-void Content::setTextForm(const QString& textForm) {
-    this->textForm = textForm;
-}
-
-enum ContentType {
-    text, image
-};
-
-/**
- * @brief Splits the given string into a list of substrings depending on whether they are text or
- * the "img" command
- */
-QList<std::pair<QString, ContentType>> separate(const QString& string) {
-    QList<std::pair<QString, ContentType>> result;
+QPair<QStringList, QStringList> Content::separate(const QString& string) {
+    QStringList elements;
+    QStringList types;
     QRegularExpression imgRegex(QString(IMAGE_CMD).append(R"(\([^()]+\.[^()]+\))"));
     QRegularExpressionMatchIterator it = imgRegex.globalMatch(string);
 
@@ -29,45 +16,45 @@ QList<std::pair<QString, ContentType>> separate(const QString& string) {
         int matchEnd = match.capturedEnd();
 
         if(matchStart > lastIndex) {
-            result.append({string.mid(lastIndex, matchStart - lastIndex), ContentType::text});
+            elements.append(string.mid(lastIndex, matchStart - lastIndex));
+            types.append("text");
         }
 
-        result.append({match.captured(), ContentType::image});
+        QString file = match.captured().mid(QString(IMAGE_CMD).length() + 1);
+        file.removeLast();
+        elements.append(file);
+        types.append("image");
 
         lastIndex = matchEnd;
     }
 
     if (lastIndex < string.length()) {
-        result.append({string.mid(lastIndex), ContentType::text});
+        elements.append(string.mid(lastIndex));
+        types.append("text");
     }
 
-    return result;
+    return {elements, types};
 }
 
-QString Content::toQml() const {
-    QList<std::pair<QString, ContentType>> elements = separate(textForm);
-    QString qml("import QtQuick; Column { width:parent.width; height:parent.height; Text { id:notfound; color:\"red\"; text: \"Image(s) not found\"; visible:false}" );
 
-    for(const auto& el : elements) {
-        if(el.second == ContentType::text) {
-            qml.append("Text { text: \"");
-            QString escaped = el.first;
-            escaped.replace('"', "\\\""); // replace " with \" for embedding in qml
-            escaped.replace('\'', "\\'"); // replace ' with \' for embedding in qml
-            qml.append(escaped);
-            qml.append("\" } ");
-        }
-        else if(el.second == ContentType::image) {
-            QString file = el.first.mid(4);
-            file.removeLast();
-            file.replace('\\', '/');
-            file.replace('"', "\\\""); // replace " with \" for embedding in qml
-            file.replace('\'', "\\'"); // replace ' with \' for embedding in qml
-            qml.append("Image { width:parent.width; fillMode: Image.PreserveAspectFit; source: \"file:///");
-            qml.append(file);
-            qml.append("\"; onStatusChanged: { if(status == Image.Error) { notfound.visible = true; }}}");
-        }
+void Content::apply(QQuickItem* contentItem)
+{
+    QPair<QStringList, QStringList> separation = separate(textForm);
+    if(!contentItem) {
+        return;
     }
-    qml.append("}");
-    return qml;
+    bool success = QMetaObject::invokeMethod(contentItem, "setElements", 
+        Q_ARG(QVariant, QVariant::fromValue(separation.first)), 
+        Q_ARG(QVariant, QVariant::fromValue(separation.second)) 
+    );
+    if(!success) {
+        qWarning() << "ContentOwner did not find setElements method in the specified content item!";
+    }
+}
+
+void Content::setTextForm(const QString& textForm, QQuickItem* contentItem) { 
+    this->textForm = textForm; 
+    if(contentItem) {
+        apply(contentItem);
+    }
 }
