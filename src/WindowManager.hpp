@@ -39,11 +39,11 @@ private:
      * @brief Sets the window's core QML content.
      * @param source The qml file to load
      */
-    void setContent(QString source);
+    void setView(QString source);
     /** 
      * @brief Updates the window's core QML content based on whether a graph is opened and which.
      */
-    void updateContent();
+    void updateView();
     /**
      * @brief Updates the window's title based on the opened file.
      * @return The new window title.

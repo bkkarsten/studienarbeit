@@ -69,7 +69,7 @@ WindowManager::~WindowManager() {
     openedFile.close();
 }
 
-void WindowManager::setContent(QString source) {
+void WindowManager::setView(QString source) {
     QObject* rootObject = engine.rootObjects().first();
     if (!rootObject) {
         showError("Root object not found.");
@@ -83,13 +83,13 @@ void WindowManager::setContent(QString source) {
     QQmlProperty::write(contentLoader, "source", source);
 }
 
-void WindowManager::updateContent() {
+void WindowManager::updateView() {
     if(openedGraph) {
-        // setContent("qrc:/file_loaded_placeholder.qml");
-        setContent("qrc:/graphview.qml");
+        // setView("qrc:/file_loaded_placeholder.qml");
+        setView("qrc:/graphview.qml");
     }
     else {
-        setContent("qrc:/no_file.qml");
+        setView("qrc:/no_file.qml");
     }
 }
 
@@ -142,7 +142,7 @@ void WindowManager::openFile() {
         openedFileName = QString::fromStdString(fileName);
         openedGraph = true;
         updateWindowTitle();
-        updateContent();
+        updateView();
     )
 }
 
@@ -156,7 +156,7 @@ void WindowManager::newFile() {
         // TODO
         
         updateWindowTitle();
-        updateContent();
+        updateView();
     )
 }
 
@@ -210,7 +210,7 @@ void WindowManager::closeFile() {
         openedGraph = false;
         unsavedChanges = false;
         updateWindowTitle();
-        updateContent();
+        updateView();
     )
 }
 
