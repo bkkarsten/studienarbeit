@@ -13,7 +13,7 @@ public:
     /**
      * @brief Returns the question that is associated with this.
      */
-    virtual Question* getQuestion() const = 0;
+    virtual Question* getQuestion() = 0;
 };
 
 

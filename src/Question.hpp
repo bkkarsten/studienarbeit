@@ -16,7 +16,7 @@ private:
     QDateTime lastCorrectlyAnswered;
     QDateTime lastChanged;
 
-    virtual QQuickItem* getContentItem() const = 0; 
+    virtual QQuickItem* getContentItem() = 0; 
 
 CONTENTOWNER(content, getContentItem);
 
