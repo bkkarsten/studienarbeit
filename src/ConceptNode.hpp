@@ -15,7 +15,7 @@ private:
 CONTENTOWNER(content, getContentItem);
 
 public:
-    ConceptNode(const QString& contentTextForm = "");
+    ConceptNode(QObject* parent = nullptr);
     const QDateTime& getLastChanged() const { return lastChanged; }
     void* getOutgoingQuestions() const { return nullptr; } // TODO!
     /**

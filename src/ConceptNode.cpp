@@ -5,8 +5,9 @@ QQuickItem* ConceptNode::getContentItem() const
     return getItem() ? getItem()->findChild<QQuickItem*>("content") : nullptr;
 }
 
-ConceptNode::ConceptNode(const QString& contentTextForm)
-    : lastChanged(QDateTime::currentDateTime())
+ConceptNode::ConceptNode(QObject* parent)
+    : qan::Node(parent)
+    , lastChanged(QDateTime::currentDateTime())
 {
 }
 

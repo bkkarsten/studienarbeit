@@ -10,14 +10,10 @@ Qan.NodeItem {
     width:60
     height:60
 
-    Rectangle {
-        id: background
-        z: 1
+    Qan.RectNodeTemplate {
         anchors.fill: parent
-        radius: 2
-        color: "white"
-        border.color: "black"
-        border.width: 2
+        nodeItem : parent
+        id: template
 
         Content {
             id: content
