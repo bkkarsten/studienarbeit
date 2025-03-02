@@ -6,6 +6,8 @@
 
 #include "Content.hpp"
 
+class Question;
+
 class ConceptNode : public qan::Node {
     Q_OBJECT
 private:
@@ -17,7 +19,8 @@ CONTENTOWNER(content, getContentItem);
 public:
     ConceptNode(QObject* parent = nullptr);
     const QDateTime& getLastChanged() const { return lastChanged; }
-    void* getOutgoingQuestions() const { return nullptr; } // TODO!
+    QList<Question*> getOutgoingQuestions();
+    QList<Question*> getIncomingQuestions();
     /**
      * @brief Returns the QML item associated with this node type.
      */
