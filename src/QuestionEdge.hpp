@@ -11,7 +11,7 @@ class QuestionEdge : public EdgeBase
                    , public Question 
 {
 private:
-    QQuickItem* getContentItem() override { return nullptr; }
+    QQuickItem* getContentItem() override;
 public:
     QuestionEdge(QObject* parent) : EdgeBase(parent) {}
     /**

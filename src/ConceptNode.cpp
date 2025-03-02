@@ -1,7 +1,6 @@
 #include "ConceptNode.hpp"
 
-QQuickItem* ConceptNode::getContentItem() const
-{
+QQuickItem* ConceptNode::getContentItem() {
     return getItem() ? getItem()->findChild<QQuickItem*>("content") : nullptr;
 }
 

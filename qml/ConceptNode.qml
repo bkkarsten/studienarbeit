@@ -5,6 +5,7 @@ import QtQuick.Controls.Material
 
 import QuickQanava as Qan
 
+// A node that holds Content.
 Qan.NodeItem {
     id: conceptNode
     width:60

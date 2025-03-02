@@ -10,7 +10,7 @@ class ConceptNode : public qan::Node {
     Q_OBJECT
 private:
     QDateTime lastChanged;
-    QQuickItem* getContentItem() const;
+    QQuickItem* getContentItem();
 
 CONTENTOWNER(content, getContentItem);
 

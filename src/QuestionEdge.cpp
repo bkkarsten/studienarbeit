@@ -7,3 +7,7 @@ QQmlComponent* QuestionEdge::delegate(QQmlEngine& engine, QObject* parent) {
         delegate = std::make_unique<QQmlComponent>(&engine, "qrc:/QuestionEdge.qml");
     return delegate.get();
 }
+
+QQuickItem* QuestionEdge::getContentItem() {
+    return getItem() ? getItem()->findChild<QQuickItem*>("content") : nullptr;
+}
