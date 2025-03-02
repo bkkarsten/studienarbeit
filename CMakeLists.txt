@@ -7,7 +7,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 # set(CMAKE_VERBOSE_MAKEFILE ON)
 
-set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_BUILD_TYPE Debug)
 
 find_package(Qt6 REQUIRED COMPONENTS Qml Quick Core Gui Widgets)
 
@@ -18,6 +18,7 @@ set(SOURCES
     src/WindowManager.cpp
     src/initialiseDirectory.cpp
     src/Content.cpp
+    src/ConceptNode.cpp
 )
 
 add_executable(studar ${SOURCES})

@@ -4,6 +4,7 @@
         <file>no_file.qml</file>
         <file>file_loaded_placeholder.qml</file>
         <file>graphview.qml</file>
+        <file>ConceptNode.qml</file>
         <file>Content.qml</file>
     </qresource>
 </RCC>
