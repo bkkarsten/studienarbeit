@@ -18,7 +18,7 @@ Column {
     // Add an image element to the column.
     function addImageElement(path) {
         var newImage = Qt.createQmlObject(
-            'import QtQuick 2.15; Image { source: "' + path + '"; width: parent.width; fillMode: Image.PreserveAspectFit }',
+            'import QtQuick 2.15; Image { source: "file:///' + path + '"; width: parent.width; fillMode: Image.PreserveAspectFit }',
             contentColumn
         );
     }
@@ -33,9 +33,17 @@ Column {
         }
     }
 
-    // Example usage
-    Component.onCompleted: {
-        addTextElement("Hello, dynamic text!");
-        addImageElement("file:///c:/users/bkars/a.png");
-    }
+    function setElements(elements, types) {
+        clearElements();
+        for(var i = 0; i < elements.length; i++) {
+            var element = elements[i];
+            if(types[i] === "text") {
+                addTextElement(element);
+            } 
+            else if(types[i] === "image") {
+                addImageElement(element);
+            }
+        }
+    } 
+    
 }
