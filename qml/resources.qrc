@@ -7,5 +7,6 @@
         <file>ConceptNode.qml</file>
         <file>Content.qml</file>
         <file>QuestionEdge.qml</file>
+        <file>RelationNode.qml</file>
     </qresource>
 </RCC>
