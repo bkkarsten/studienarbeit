@@ -1,4 +1,5 @@
 #include "QuestionEdge.hpp"
+#include "ConceptNode.hpp"
 
 QQmlComponent* QuestionEdge::delegate(QQmlEngine& engine, QObject* parent) {
     Q_UNUSED(parent)
@@ -10,4 +11,20 @@ QQmlComponent* QuestionEdge::delegate(QQmlEngine& engine, QObject* parent) {
 
 QQuickItem* QuestionEdge::getContentItem() {
     return getItem() ? getItem()->findChild<QQuickItem*>("content") : nullptr;
+}
+
+QList<ConceptNode*> QuestionEdge::getContext() {
+    ConceptNode* source = dynamic_cast<ConceptNode*>(qan::Edge::getSource());
+    if(source) {
+        return QList<ConceptNode*>({source});
+    }
+    return QList<ConceptNode*>();
+}
+
+QList<ConceptNode*> QuestionEdge::getAnswers() {
+    ConceptNode* source = dynamic_cast<ConceptNode*>(qan::Edge::getDestination());
+    if(source) {
+        return QList<ConceptNode*>({source});
+    }
+    return QList<ConceptNode*>();
 }

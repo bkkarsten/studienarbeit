@@ -21,8 +21,8 @@ public:
 
     Question* getQuestion() override { return dynamic_cast<Question*>(this); }
 
-    QList<ConceptNode*> getContext() override { return QList<ConceptNode*>(); }
-    QList<ConceptNode*> getAnswers() override { return QList<ConceptNode*>(); }
+    QList<ConceptNode*> getContext() override;
+    QList<ConceptNode*> getAnswers() override;
 };
 
 
