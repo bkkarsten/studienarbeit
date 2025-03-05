@@ -15,6 +15,10 @@ public:
      * @brief Returns the question that is associated with this.
      */
     virtual Question* getQuestion() = 0;
+    /**
+     * @brief Whether the edge is valid. True if not overridden.
+     */
+    virtual bool valid() { return true; }
 };
 
 
