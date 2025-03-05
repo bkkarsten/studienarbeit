@@ -7,7 +7,7 @@ QQuickItem* ConceptNode::getContentItem() {
 }
 
 ConceptNode::ConceptNode(QObject* parent)
-    : qan::Node(parent)
+    : NodeBase(parent)
     , lastChanged(QDateTime::currentDateTime())
 {
 }

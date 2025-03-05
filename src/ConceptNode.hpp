@@ -1,14 +1,14 @@
 #ifndef CONCEPTNODE_H
 #define CONCEPTNODE_H
 
-#include <QuickQanava>
 #include <QDateTime>
 
 #include "Content.hpp"
+#include "NodeBase.hpp"
 
 class Question;
 
-class ConceptNode : public qan::Node {
+class ConceptNode : public NodeBase {
     Q_OBJECT
 private:
     QDateTime lastChanged;
