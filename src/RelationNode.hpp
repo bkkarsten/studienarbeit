@@ -21,8 +21,8 @@ public:
      */
     static QQmlComponent* delegate(QQmlEngine& engine, QObject* parent = nullptr);
 
-    QList<ConceptNode*> getContext() override { return QList<ConceptNode*>(); }
-    QList<ConceptNode*> getAnswers() override { return QList<ConceptNode*>(); }
+    QList<ConceptNode*> getContext() override;
+    QList<ConceptNode*> getAnswers() override;
 };
 
 
