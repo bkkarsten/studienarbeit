@@ -21,6 +21,7 @@ set(SOURCES
     src/ConceptNode.cpp
     src/QuestionEdge.cpp
     src/RelationNode.cpp
+    src/ConnectorEdge.cpp
 )
 
 add_executable(studar ${SOURCES})
