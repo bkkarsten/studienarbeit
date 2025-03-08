@@ -8,10 +8,12 @@
  */
 class ConnectorEdge : public EdgeBase {
 private:
-    boost::json::string getTypeName() override { return "ConnectorEdge"; }
     boost::json::object propertiesToJson() override { return boost::json::object(); }
+    void propertiesLoadJson(boost::json::object json) override {}
 public:
-    ConnectorEdge(QObject* parent) : EdgeBase(parent) {}
+    ConnectorEdge(QObject* parent = nullptr) : EdgeBase(parent) {}
+
+    boost::json::string getTypeName() override { return "ConnectorEdge"; }
     /**
      * @brief Whether the edge is valid. True if out of the source and destination nodes,
      * exactly one is a concept node and one is a relation node.

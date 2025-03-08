@@ -13,11 +13,12 @@ class RelationNode : public NodeBase
 {
 private:
     QQuickItem* getContentItem() override;
-    boost::json::string getTypeName() override { return "RelationNode"; }
     boost::json::object propertiesToJson() override;
+    void propertiesLoadJson(boost::json::object json) override;
 public:
     RelationNode(QObject* parent = nullptr);
 
+    boost::json::string getTypeName() override { return "RelationNode"; }
     /**
      * @brief Returns the QML item associated with this node type.
      */

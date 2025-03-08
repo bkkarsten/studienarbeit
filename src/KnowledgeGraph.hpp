@@ -20,13 +20,13 @@ public:
     bool valid();
 
     /**
-     * @brief Clears the graph and loads a graph from a file in json format.
-     */
-    void loadFile(std::fstream& file);
-    /**
      * @brief Saves the graph to a file in json format.
      */
-    void saveFile(std::fstream& file);
+    void saveFile(std::ofstream& file);
+    /**
+     * @brief Clears the graph and loads a graph from a file in json format.
+     */
+    void loadFile(std::ifstream& file);
 
     /**
      * @brief Inserts a ConceptNode into the graph and returns a pointer to it.
@@ -36,7 +36,7 @@ public:
      * @param width The width of the node. If not specified, the default width is used.
      * @param height The height of the node. If not specified, the default height is used.
      */
-    ConceptNode* insertConceptNode(QString contentTextForm,
+    ConceptNode* insertConceptNode(QString contentTextForm = "",
                                    qreal x = 0,
                                    qreal y = 0,
                                    qreal width = -1,
@@ -46,7 +46,7 @@ public:
      * @param src The source node of the edge.
      * @param dest The destination node of the edge.
      */
-    QuestionEdge* insertQuestionEdge(QString contentTextForm, ConceptNode* src, ConceptNode* dest);
+    QuestionEdge* insertQuestionEdge(ConceptNode* src, ConceptNode* dest, QString contentTextForm = "");
     /**
      * @brief Inserts a ConnectorEdge into the graph and returns a pointer to it.
      * @param src The source concept node of the edge.
@@ -69,7 +69,7 @@ public:
      * @param context The concept nodes from which a connector edge will point into the relation node.
      * @param answers The concept nodes to which a connector edge will point from the relation node.
      */
-    RelationNode* insertRelationNode(QString contentTextForm,
+    RelationNode* insertRelationNode(QString contentTextForm = "",
                                      qreal x = 0,
                                      qreal y = 0,
                                      qreal width = -1,

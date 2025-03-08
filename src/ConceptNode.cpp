@@ -5,8 +5,13 @@
 boost::json::object ConceptNode::propertiesToJson() {
     boost::json::object json;
     json["lastChanged"] = lastChanged.toString().toStdString();
-    json["content"] = content.getTextForm().toStdString();
+    json["content"] = getContentTextForm().toStdString();
     return json;
+}
+
+void ConceptNode::propertiesLoadJson(boost::json::object json) {
+    lastChanged = QDateTime::fromString(QString::fromStdString(std::string(json["lastChanged"].as_string())), Qt::ISODate);
+    setContentTextForm(QString::fromStdString(std::string(json["content"].as_string())));
 }
 
 QQuickItem* ConceptNode::getContentItem() {

@@ -24,6 +24,7 @@ CONTENTOWNER(content, getContentItem);
 
 protected:
     boost::json::object questionToJson();
+    void questionLoadJson(boost::json::object json);
 public:
     Question() {};
     const QDateTime& getLastAnswered() const { return lastAnswered; }

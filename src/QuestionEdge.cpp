@@ -17,6 +17,10 @@ boost::json::object QuestionEdge::propertiesToJson() {
     return Question::questionToJson();
 }
 
+void QuestionEdge::propertiesLoadJson(boost::json::object json) {
+    Question::questionLoadJson(json);
+}
+
 QList<ConceptNode*> QuestionEdge::getContext() {
     ConceptNode* source = dynamic_cast<ConceptNode*>(qan::Edge::getSource());
     if(source) {

@@ -13,13 +13,13 @@ class Question;
 class EdgeBase : public qan::Edge {
 private:
     /**
-     * @brief Get the type name of the edge for json representation.
-     */
-    virtual boost::json::string getTypeName() = 0;
-    /**
-     * @brief Convert the edge to a JSON object, excluding the type name.
+     * @brief Convert the properties specific to the edge implementation to a JSON object.
      */
     virtual boost::json::object propertiesToJson() = 0;
+    /**
+     * @brief Load the properties specific to the edge implementation from a JSON object.
+     */ 
+    virtual void propertiesLoadJson(boost::json::object json) = 0;
 public:
     EdgeBase(QObject* parent) : qan::Edge(parent) {}
     /**
@@ -32,19 +32,18 @@ public:
     virtual bool valid() { return true; }
 
     /**
-     * @brief Load the edge from a JSON object.
+     * @brief Get the type name of the edge for json representation.
      */
-    // virtual void loadJson(const boost::json::object& jsonObject) = 0;
+    virtual boost::json::string getTypeName() = 0;
+
     /**
-     * @brief Save the node to a JSON object, including the type name.
+     * @brief Save the node to a JSON object.
      */
-    virtual boost::json::object toJson(int srcId, int destId) {
-        boost::json::object json = propertiesToJson();
-        json["type"] = getTypeName();
-        json["src"] = srcId;
-        json["dest"] = destId;
-        return json;
-    }
+    virtual boost::json::object toJson(int srcId, int destId);
+    /**
+     * @brief Load the node from a JSON object.
+     */
+    virtual void loadJson(boost::json::object json);
 };
 
 

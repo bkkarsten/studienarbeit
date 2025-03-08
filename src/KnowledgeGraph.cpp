@@ -48,7 +48,7 @@ ConceptNode* KnowledgeGraph::insertConceptNode(QString contentTextForm, qreal x,
     return node;
 }
 
-QuestionEdge* KnowledgeGraph::insertQuestionEdge(QString contentTextForm, ConceptNode* src, ConceptNode* dest) {
+QuestionEdge* KnowledgeGraph::insertQuestionEdge(ConceptNode* src, ConceptNode* dest, QString contentTextForm) {
     QuestionEdge* edge = dynamic_cast<QuestionEdge*>(insertEdge<QuestionEdge>(*src, dest));
     if(edge) {
         edge->setContentTextForm(contentTextForm);
@@ -90,7 +90,7 @@ RelationNode* KnowledgeGraph::insertRelationNode(QString contentTextForm, qreal 
     return node;
 }
 
-void KnowledgeGraph::saveFile(std::fstream& file) {
+void KnowledgeGraph::saveFile(std::ofstream& file) {
     boost::json::object jsonObject;
     boost::json::array jsonNodesArray;
     auto& nodes = get_nodes();
@@ -116,4 +116,49 @@ void KnowledgeGraph::saveFile(std::fstream& file) {
     jsonObject["edges"] = jsonEdgesArray;
     file << boost::json::serialize(jsonObject);
     file.flush();
+}
+
+void KnowledgeGraph::loadFile(std::ifstream& file) {
+    clear();
+    boost::json::value jsonValue;
+    file >> jsonValue;
+    boost::json::object jsonObject = jsonValue.as_object();
+    boost::json::array jsonNodesArray = jsonObject["nodes"].as_array();
+    boost::json::string conceptNodeTypeName = ConceptNode().getTypeName();
+    boost::json::string relationNodeTypeName = RelationNode().getTypeName();
+    for(boost::json::value jsonNodeValue : jsonNodesArray) {
+        boost::json::object jsonNode = jsonNodeValue.as_object();
+        boost::json::string type = jsonNode["type"].as_string();
+        NodeBase* node = nullptr;
+        if(type == conceptNodeTypeName) {
+            node = insertNode<ConceptNode>();
+        }
+        else if(type == relationNodeTypeName) {
+            node = insertNode<RelationNode>();
+        }
+        if(node) {
+            node->loadJson(jsonNode);
+        }
+    }
+    boost::json::array jsonEdgesArray = jsonObject["edges"].as_array();
+    boost::json::string questionEdgeTypeName = QuestionEdge().getTypeName();
+    boost::json::string connectorEdgeTypeName = ConnectorEdge().getTypeName();
+    for(boost::json::value jsonEdgeValue : jsonEdgesArray) {
+        boost::json::object jsonEdge = jsonEdgeValue.as_object();
+        boost::json::string type = jsonEdge["type"].as_string();
+        int src = jsonEdge["src"].as_int64();
+        int dest = jsonEdge["dest"].as_int64();
+        NodeBase* srcNode = dynamic_cast<NodeBase*>(get_nodes().getContainer()[src]);
+        NodeBase* destNode = dynamic_cast<NodeBase*>(get_nodes().getContainer()[dest]);
+        EdgeBase* edge = nullptr;
+        if(type == questionEdgeTypeName) {
+            edge = dynamic_cast<QuestionEdge*>(insertEdge<QuestionEdge>(*srcNode, destNode));
+        }
+        else if(type == connectorEdgeTypeName) {
+            edge = dynamic_cast<ConnectorEdge*>(insertEdge<ConnectorEdge>(*srcNode, destNode));
+        }
+        if(edge) {
+            edge->loadJson(jsonEdge);
+        }
+    }
 }

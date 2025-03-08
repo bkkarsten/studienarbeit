@@ -51,3 +51,7 @@ QQuickItem* RelationNode::getContentItem() {
 boost::json::object RelationNode::propertiesToJson() {
     return Question::questionToJson();
 }
+
+void RelationNode::propertiesLoadJson(boost::json::object json) {
+    Question::questionLoadJson(json);
+}
