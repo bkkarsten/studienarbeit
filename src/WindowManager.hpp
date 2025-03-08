@@ -30,8 +30,8 @@ private:
     QMessageBox errorMessage;
     // An object to show a prompt to save changes
     QMessageBox savePrompt;
-    // The file which has been opened
-    std::fstream openedFile;
+    // Whether a file has been opened
+    bool openedFile;
     // The name of the file which has been opened
     QString openedFileName;
     // Whether a graph is currently opened
@@ -46,7 +46,7 @@ private:
     /** 
      * @brief Updates the window's core QML content based on whether a graph is opened and which.
      */
-    void updateView();
+    void updateViewAndGraph();
     /**
      * @brief Updates the window's title based on the opened file.
      * @return The new window title.
@@ -63,14 +63,13 @@ private:
     /**
      * @brief Saves the graph to openedFile.
      */
-    void saveGraph();
+    void saveGraph(std::ofstream& file);
 public:
     /**
      * @brief Constructs the main window.
      * @param defaultDir The default directory to open file dialogs in. If empty, will open in the executable's directory.
      */ 
     WindowManager(QString defaultDir = "");
-    ~WindowManager();
 
     /**
      * @brief Lets the main window know that changes have been made to the opened graph.
