@@ -12,6 +12,8 @@ class ConceptNode : public NodeBase {
     Q_OBJECT
 private:
     QDateTime lastChanged;
+    boost::json::string getTypeName() override { return "ConceptNode"; }
+    boost::json::object propertiesToJson() override;
     QQuickItem* getContentItem();
 
 CONTENTOWNER(content, getContentItem);

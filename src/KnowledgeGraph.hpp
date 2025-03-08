@@ -20,6 +20,15 @@ public:
     bool valid();
 
     /**
+     * @brief Clears the graph and loads a graph from a file in json format.
+     */
+    void loadFile(std::fstream& file);
+    /**
+     * @brief Saves the graph to a file in json format.
+     */
+    void saveFile(std::fstream& file);
+
+    /**
      * @brief Inserts a ConceptNode into the graph and returns a pointer to it.
      * @param contentTextForm The content of the node represented by text.
      * @param x The x coordinate of the node.

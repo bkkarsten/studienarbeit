@@ -2,6 +2,13 @@
 #include "Question.hpp"
 #include "EdgeBase.hpp"
 
+boost::json::object ConceptNode::propertiesToJson() {
+    boost::json::object json;
+    json["lastChanged"] = lastChanged.toString().toStdString();
+    json["content"] = content.getTextForm().toStdString();
+    return json;
+}
+
 QQuickItem* ConceptNode::getContentItem() {
     return getItem() ? getItem()->findChild<QQuickItem*>("content") : nullptr;
 }

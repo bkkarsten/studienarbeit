@@ -2,6 +2,9 @@
 #include "NodeBase.hpp"
 #include "EdgeBase.hpp"
 
+#include <boost/graph/graphml.hpp>
+
+#include <fstream>
 
 bool KnowledgeGraph::valid() {
     for(qan::Node* node : get_nodes()) {
@@ -85,4 +88,32 @@ RelationNode* KnowledgeGraph::insertRelationNode(QString contentTextForm, qreal 
         ConnectorEdge* edge = insertConnectorEdge(node, a);
     }
     return node;
+}
+
+void KnowledgeGraph::saveFile(std::fstream& file) {
+    boost::json::object jsonObject;
+    boost::json::array jsonNodesArray;
+    auto& nodes = get_nodes();
+    for(qan::Node* node : nodes) {
+        NodeBase* nodeBase = dynamic_cast<NodeBase*>(node);
+        if(nodeBase) {
+            jsonNodesArray.push_back(nodeBase->toJson());
+        }
+    }
+    boost::json::array jsonEdgesArray;
+    for(int i = 0; i < nodes.size(); i++) {
+        for(int j = 0; j < nodes.size(); j++) {
+            qan::Edge* edge = find_edge(nodes.getContainer()[i], nodes.getContainer()[j]);
+            if(edge) {
+                EdgeBase* edgeBase = dynamic_cast<EdgeBase*>(edge);
+                if(edgeBase) {
+                    jsonEdgesArray.push_back(edgeBase->toJson(i, j));
+                }
+            }
+        }
+    }
+    jsonObject["nodes"] = jsonNodesArray;
+    jsonObject["edges"] = jsonEdgesArray;
+    file << boost::json::serialize(jsonObject);
+    file.flush();
 }

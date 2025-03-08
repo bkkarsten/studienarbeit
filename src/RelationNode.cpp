@@ -47,3 +47,7 @@ QList<ConceptNode*> RelationNode::getAnswers() {
 QQuickItem* RelationNode::getContentItem() {
     return getItem() ? getItem()->findChild<QQuickItem*>("content") : nullptr;
 }
+
+boost::json::object RelationNode::propertiesToJson() {
+    return Question::questionToJson();
+}

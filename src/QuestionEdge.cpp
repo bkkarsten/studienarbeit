@@ -13,6 +13,10 @@ QQuickItem* QuestionEdge::getContentItem() {
     return getItem() ? getItem()->findChild<QQuickItem*>("content") : nullptr;
 }
 
+boost::json::object QuestionEdge::propertiesToJson() {
+    return Question::questionToJson();
+}
+
 QList<ConceptNode*> QuestionEdge::getContext() {
     ConceptNode* source = dynamic_cast<ConceptNode*>(qan::Edge::getSource());
     if(source) {

@@ -4,7 +4,9 @@
 #include <QDateTime>
 #include <QQuickItem>
 
-#include <Content.hpp>
+#include <boost/json.hpp>
+
+#include "Content.hpp"
 
 class ConceptNode;
 
@@ -20,6 +22,8 @@ private:
 
 CONTENTOWNER(content, getContentItem);
 
+protected:
+    boost::json::object questionToJson();
 public:
     Question() {};
     const QDateTime& getLastAnswered() const { return lastAnswered; }

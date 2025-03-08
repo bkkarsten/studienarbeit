@@ -12,6 +12,8 @@ class QuestionEdge : public EdgeBase
 {
 private:
     QQuickItem* getContentItem() override;
+    boost::json::string getTypeName() override { return "QuestionEdge"; }
+    boost::json::object propertiesToJson() override;
 public:
     QuestionEdge(QObject* parent) : EdgeBase(parent) {}
     /**

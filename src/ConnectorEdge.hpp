@@ -7,6 +7,9 @@
  * @brief An edge in the graph that connects relation nodes to concept nodes.
  */
 class ConnectorEdge : public EdgeBase {
+private:
+    boost::json::string getTypeName() override { return "ConnectorEdge"; }
+    boost::json::object propertiesToJson() override { return boost::json::object(); }
 public:
     ConnectorEdge(QObject* parent) : EdgeBase(parent) {}
     /**
