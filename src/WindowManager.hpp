@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include <QQuickWindow>
 
+class KnowledgeGraph;
 
 /**
  * @brief Main window of the application which handles the QML
@@ -19,6 +20,8 @@ private:
     QQmlApplicationEngine engine;
     // The ApplicationWindow defined in QML
     QQuickWindow* qmlWindow;
+    // A pointer to the currently opened graph
+    KnowledgeGraph* graph;
     // File dialog configured to be used to open files
     QFileDialog openFileDialog;
     // File dialog configured to be used to save files

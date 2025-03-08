@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QDebug>
 #include <QuickQanava>
+#include "KnowledgeGraph.hpp"
 
 /**
  * @brief If there are any unsaved changes, this will open a save dialog and execute the given code 
@@ -46,9 +47,9 @@ engine.addImportPath("external/QuickQanava/src");
 
     // Configure file dialogs
     openFileDialog.setFileMode(QFileDialog::ExistingFile);
-    openFileDialog.setNameFilter(tr("GraphML File (*.graphml)"));
+    openFileDialog.setNameFilter(tr("JSON File (*.json)"));
     saveAsDialog.setFileMode(QFileDialog::AnyFile);
-    saveAsDialog.setNameFilter(tr("GraphML File (*.graphml)"));
+    saveAsDialog.setNameFilter(tr("JSON File (*.json)"));
     saveAsDialog.setAcceptMode(QFileDialog::AcceptSave);
     if(!defaultDir.isEmpty()) {
         openFileDialog.setDirectory(QDir(defaultDir));
@@ -87,9 +88,11 @@ void WindowManager::updateView() {
     if(openedGraph) {
         // setView("qrc:/file_loaded_placeholder.qml");
         setView("qrc:/graphview.qml");
+        graph = qobject_cast<KnowledgeGraph*>(engine.rootObjects().first()->findChild<QQuickItem*>("graph"));
     }
     else {
         setView("qrc:/no_file.qml");
+        graph = nullptr;
     }
 }
 
@@ -133,7 +136,7 @@ void WindowManager::openFile() {
             return;
         }
         std::string fileName = openFileDialog.selectedFiles().first().toStdString();
-        std::fstream tempFile(fileName);
+        std::fstream tempFile(fileName, std::ios::in | std::ios::out | std::ios::trunc);
         if(!tempFile) {
             showError("Error opening new file.");
             return;
@@ -165,6 +168,8 @@ void WindowManager::saveFile() {
         return;
     }
     if(openedFile.is_open()) {
+        openedFile.close();
+        openedFile.open(openedFileName.toStdString(), std::ios::in | std::ios::out | std::ios::trunc); // reopen file to clear it
         saveGraph();
     }
     else {
@@ -186,7 +191,7 @@ void WindowManager::saveFileAs() {
         return;
     }
     createFile.close();
-    std::fstream tempFile(fileName);
+    std::fstream tempFile(fileName, std::ios::in | std::ios::out | std::ios::trunc);
     if(!tempFile) {
         showError("Error opening new file.");
         return;
@@ -199,7 +204,7 @@ void WindowManager::saveFileAs() {
 void WindowManager::saveGraph() {
     unsavedChanges = false;
     updateWindowTitle();
-
+    graph->saveFile(openedFile);
     // TODO
 }
 
