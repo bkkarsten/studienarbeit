@@ -2,6 +2,8 @@
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
 
+#include <boost/json/src.hpp>
+
 #include "config.hpp"
 #include "WindowManager.hpp"
 #include "initialiseDirectory.hpp"

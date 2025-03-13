@@ -5,6 +5,8 @@
 #include <QQmlContext>
 #include <QPushButton>
 #include <QDebug>
+#include <QuickQanava>
+#include "KnowledgeGraph.hpp"
 
 /**
  * @brief If there are any unsaved changes, this will open a save dialog and execute the given code 
@@ -38,14 +40,16 @@ WindowManager::WindowManager(QString defaultDir)
     if (engine.rootObjects().isEmpty()) {
         throw std::runtime_error("Root object not found.");
     }
+engine.addImportPath("external/QuickQanava/src");
+    QuickQanava::initialize(&engine);
     qmlWindow = qobject_cast<QQuickWindow*>(engine.rootObjects().first());
     qmlWindow->setTitle(WINDOW_TITLE);
 
     // Configure file dialogs
     openFileDialog.setFileMode(QFileDialog::ExistingFile);
-    openFileDialog.setNameFilter(tr("GraphML File (*.graphml)"));
+    openFileDialog.setNameFilter(tr("JSON File (*.json)"));
     saveAsDialog.setFileMode(QFileDialog::AnyFile);
-    saveAsDialog.setNameFilter(tr("GraphML File (*.graphml)"));
+    saveAsDialog.setNameFilter(tr("JSON File (*.json)"));
     saveAsDialog.setAcceptMode(QFileDialog::AcceptSave);
     if(!defaultDir.isEmpty()) {
         openFileDialog.setDirectory(QDir(defaultDir));
@@ -62,11 +66,7 @@ WindowManager::WindowManager(QString defaultDir)
     savePrompt.addButton(QMessageBox::Discard);
 }
 
-WindowManager::~WindowManager() {
-    openedFile.close();
-}
-
-void WindowManager::setContent(QString source) {
+void WindowManager::setView(QString source) {
     QObject* rootObject = engine.rootObjects().first();
     if (!rootObject) {
         showError("Root object not found.");
@@ -80,12 +80,15 @@ void WindowManager::setContent(QString source) {
     QQmlProperty::write(contentLoader, "source", source);
 }
 
-void WindowManager::updateContent() {
+void WindowManager::updateViewAndGraph() {
     if(openedGraph) {
-        setContent("qrc:/file_loaded_placeholder.qml");
+        // setView("qrc:/file_loaded_placeholder.qml");
+        setView("qrc:/graphview.qml");
+        graph = qobject_cast<KnowledgeGraph*>(engine.rootObjects().first()->findChild<QQuickItem*>("graph"));
     }
     else {
-        setContent("qrc:/no_file.qml");
+        setView("qrc:/no_file.qml");
+        graph = nullptr;
     }
 }
 
@@ -129,22 +132,24 @@ void WindowManager::openFile() {
             return;
         }
         std::string fileName = openFileDialog.selectedFiles().first().toStdString();
-        std::fstream tempFile(fileName);
-        if(!tempFile) {
-            showError("Error opening new file.");
+        std::ifstream file(fileName);
+        if(!file) {
+            showError("Error opening file.");
             return;
         }
-        openedFile = std::move(tempFile);
+        openedFile = true;
         openedFileName = QString::fromStdString(fileName);
         openedGraph = true;
         updateWindowTitle();
-        updateContent();
+        updateViewAndGraph();
+        graph->loadFile(file);
+        file.close();
     )
 }
 
 void WindowManager::newFile() {
     SAVE_PROMPT_GUARD(
-        openedFile.close();
+        openedFile = false;
         openedFileName.clear();
         openedGraph = true;
         unsavedChanges = false;
@@ -152,7 +157,7 @@ void WindowManager::newFile() {
         // TODO
         
         updateWindowTitle();
-        updateContent();
+        updateViewAndGraph();
     )
 }
 
@@ -160,8 +165,9 @@ void WindowManager::saveFile() {
     if(!openedGraph) {
         return;
     }
-    if(openedFile.is_open()) {
-        saveGraph();
+    if(openedFile) {
+        std::ofstream file(openedFileName.toStdString(), std::ios::trunc);
+        saveGraph(file);
     }
     else {
         saveFileAs();
@@ -176,37 +182,31 @@ void WindowManager::saveFileAs() {
         return;
     }
     std::string fileName = saveAsDialog.selectedFiles().first().toStdString();
-    std::ofstream createFile(fileName);
-    if(!createFile) {
-        showError("Error creating file.");
-        return;
-    }
-    createFile.close();
-    std::fstream tempFile(fileName);
-    if(!tempFile) {
+    std::ofstream file(fileName, std::ios::trunc);
+    if(!file) {
         showError("Error opening new file.");
         return;
     }
-    openedFile = std::move(tempFile);
+    openedFile = true;
     openedFileName = QString::fromStdString(fileName);
-    saveGraph();
+    saveGraph(file);
 }
 
-void WindowManager::saveGraph() {
+void WindowManager::saveGraph(std::ofstream& file) {
     unsavedChanges = false;
     updateWindowTitle();
-
-    // TODO
+    graph->saveFile(file);
+    file.close();
 }
 
 void WindowManager::closeFile() {
     SAVE_PROMPT_GUARD(
-        openedFile.close();
+        openedFile = false;
         openedFileName.clear();
         openedGraph = false;
         unsavedChanges = false;
         updateWindowTitle();
-        updateContent();
+        updateViewAndGraph();
     )
 }
 
