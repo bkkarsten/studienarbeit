@@ -46,12 +46,16 @@ private:
     /** 
      * @brief Updates the window's core QML content based on whether a graph is opened and which.
      */
-    void updateViewAndGraph();
+    void updateView();
     /**
      * @brief Updates the window's title based on the opened file.
      * @return The new window title.
      */
     QString updateWindowTitle();
+    /**
+     * @brief If a file ist opened, get's the graph from the QML engine and sets up the object.
+     */
+    void updateGraph();
     /**
      * @brief Shows an error message box with the given message.
      */

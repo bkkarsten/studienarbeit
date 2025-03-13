@@ -40,7 +40,7 @@ WindowManager::WindowManager(QString defaultDir)
     if (engine.rootObjects().isEmpty()) {
         throw std::runtime_error("Root object not found.");
     }
-engine.addImportPath("external/QuickQanava/src");
+    engine.addImportPath("external/QuickQanava/src");
     QuickQanava::initialize(&engine);
     qmlWindow = qobject_cast<QQuickWindow*>(engine.rootObjects().first());
     qmlWindow->setTitle(WINDOW_TITLE);
@@ -80,14 +80,27 @@ void WindowManager::setView(QString source) {
     QQmlProperty::write(contentLoader, "source", source);
 }
 
-void WindowManager::updateViewAndGraph() {
+void WindowManager::updateView() {
     if(openedGraph) {
         // setView("qrc:/file_loaded_placeholder.qml");
         setView("qrc:/graphview.qml");
-        graph = qobject_cast<KnowledgeGraph*>(engine.rootObjects().first()->findChild<QQuickItem*>("graph"));
     }
     else {
         setView("qrc:/no_file.qml");
+    }
+}
+
+void WindowManager::updateGraph() {
+    if(openedGraph) {
+        graph = qobject_cast<KnowledgeGraph*>(engine.rootObjects().first()->findChild<QQuickItem*>("graph"));
+        if (graph) {
+            connect(graph, &KnowledgeGraph::changed, this, [this]() {
+                unsavedChanges = true;
+                updateWindowTitle();
+            });
+        }
+    }
+    else {
         graph = nullptr;
     }
 }
@@ -141,7 +154,8 @@ void WindowManager::openFile() {
         openedFileName = QString::fromStdString(fileName);
         openedGraph = true;
         updateWindowTitle();
-        updateViewAndGraph();
+        updateView();
+        updateGraph();
         graph->loadFile(file);
         file.close();
     )
@@ -157,7 +171,8 @@ void WindowManager::newFile() {
         // TODO
         
         updateWindowTitle();
-        updateViewAndGraph();
+        updateView();
+        updateGraph();
     )
 }
 
@@ -206,7 +221,8 @@ void WindowManager::closeFile() {
         openedGraph = false;
         unsavedChanges = false;
         updateWindowTitle();
-        updateViewAndGraph();
+        updateView();
+        updateGraph();
     )
 }
 

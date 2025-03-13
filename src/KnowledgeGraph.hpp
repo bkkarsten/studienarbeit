@@ -36,7 +36,7 @@ public:
      * @param width The width of the node. If not specified, the default width is used.
      * @param height The height of the node. If not specified, the default height is used.
      */
-    ConceptNode* insertConceptNode(QString contentTextForm = "",
+    Q_INVOKABLE ConceptNode* insertConceptNode(QString contentTextForm = "",
                                    qreal x = 0,
                                    qreal y = 0,
                                    qreal width = -1,
@@ -46,19 +46,19 @@ public:
      * @param src The source node of the edge.
      * @param dest The destination node of the edge.
      */
-    QuestionEdge* insertQuestionEdge(ConceptNode* src, ConceptNode* dest, QString contentTextForm = "");
+    Q_INVOKABLE QuestionEdge* insertQuestionEdge(ConceptNode* src, ConceptNode* dest, QString contentTextForm = "");
     /**
      * @brief Inserts a ConnectorEdge into the graph and returns a pointer to it.
      * @param src The source concept node of the edge.
      * @param dest The destination relation node of the edge.
      */
-    ConnectorEdge* insertConnectorEdge(ConceptNode* src, RelationNode* dest);
+    Q_INVOKABLE ConnectorEdge* insertConnectorEdge(ConceptNode* src, RelationNode* dest);
     /**
      * @brief Inserts a ConnectorEdge into the graph and returns a pointer to it.
      * @param src The source relation node of the edge.
      * @param dest The destination concept node of the edge.
      */
-    ConnectorEdge* insertConnectorEdge(RelationNode* src, ConceptNode* dest);
+    Q_INVOKABLE ConnectorEdge* insertConnectorEdge(RelationNode* src, ConceptNode* dest);
     /**
      * @brief Inserts a RelationNode into the graph and returns a pointer to it.
      * @param contentTextForm The content of the node represented by text.
@@ -69,13 +69,16 @@ public:
      * @param context The concept nodes from which a connector edge will point into the relation node.
      * @param answers The concept nodes to which a connector edge will point from the relation node.
      */
-    RelationNode* insertRelationNode(QString contentTextForm = "",
+    Q_INVOKABLE RelationNode* insertRelationNode(QString contentTextForm = "",
                                      qreal x = 0,
                                      qreal y = 0,
                                      qreal width = -1,
                                      qreal height = -1,
                                      QList<ConceptNode*> context = QList<ConceptNode*>(),
                                      QList<ConceptNode*> answers = QList<ConceptNode*>());
+
+signals:
+    void changed();
 
 };
 

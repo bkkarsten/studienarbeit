@@ -48,5 +48,5 @@ qt_policy(SET QTP0001 NEW)
 qt_add_qml_module(studar
     URI studar
     VERSION 1.0
-    SOURCES src/KnowledgeGraph.hpp src/KnowledgeGraph.cpp
+    SOURCES src/KnowledgeGraph.hpp src/KnowledgeGraph.cpp src/CustomGraphView.hpp
 )

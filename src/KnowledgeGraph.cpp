@@ -45,6 +45,7 @@ ConceptNode* KnowledgeGraph::insertConceptNode(QString contentTextForm, qreal x,
             item->setHeight(height);
         }
     }
+    emit changed();
     return node;
 }
 
@@ -53,14 +54,17 @@ QuestionEdge* KnowledgeGraph::insertQuestionEdge(ConceptNode* src, ConceptNode* 
     if(edge) {
         edge->setContentTextForm(contentTextForm);
     }
+    emit changed();
     return edge;
 }
 
 ConnectorEdge* KnowledgeGraph::insertConnectorEdge(ConceptNode* src, RelationNode* dest) {
+    emit changed();
     return dynamic_cast<ConnectorEdge*>(insertEdge<ConnectorEdge>(*src, dest));
 }
 
 ConnectorEdge* KnowledgeGraph::insertConnectorEdge(RelationNode* src, ConceptNode* dest) {
+    emit changed();
     return dynamic_cast<ConnectorEdge*>(insertEdge<ConnectorEdge>(*src, dest));
 }
 
@@ -87,6 +91,7 @@ RelationNode* KnowledgeGraph::insertRelationNode(QString contentTextForm, qreal 
     for(ConceptNode* a : answers) {
         ConnectorEdge* edge = insertConnectorEdge(node, a);
     }
+    emit changed();
     return node;
 }
 

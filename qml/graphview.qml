@@ -4,12 +4,21 @@ import QuickQanava as Qan
 import "qrc:/QuickQanava" as Qan
 import studar 1.0
 
-Qan.GraphView {
+CustomGraphView {
     anchors.fill: parent
     grid : null
     graph: KnowledgeGraph {
         id: graph
         objectName: "graph"
         anchors.fill: parent
+    }
+
+    onViewDoubleClicked: (pos, shift) => {
+        if(shift) {
+            graph.insertRelationNode("", pos.x, pos.y);
+        }
+        else {
+            graph.insertConceptNode("", pos.x, pos.y);
+        }
     }
 }
