@@ -5,6 +5,8 @@ import "qrc:/QuickQanava" as Qan
 import studar 1.0
 
 CustomGraphView {
+    id: graphView
+    objectName: "graphView"
     anchors.fill: parent
     grid : null
     graph: KnowledgeGraph {

@@ -116,6 +116,9 @@ public:
      * Called when closing the window.
      */
     Q_INVOKABLE bool checkClose();
+
+public slots:
+    void changesMade();
 };
 
 #endif

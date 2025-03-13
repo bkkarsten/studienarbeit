@@ -28,6 +28,7 @@ set(SOURCES
     src/Question.cpp
     src/NodeBase.cpp
     src/EdgeBase.cpp
+    src/CustomGraphView.cpp
 )
 
 add_executable(studar ${SOURCES})

@@ -1,12 +1,14 @@
 #include "WindowManager.hpp"
 #include "config.hpp"
 
+#include "KnowledgeGraph.hpp"
+
 #include <QQmlProperty>
 #include <QQmlContext>
 #include <QPushButton>
 #include <QDebug>
 #include <QuickQanava>
-#include "KnowledgeGraph.hpp"
+
 
 /**
  * @brief If there are any unsaved changes, this will open a save dialog and execute the given code 
@@ -18,7 +20,9 @@
         savePrompt.exec(); \
         int res = savePrompt.result(); \
         if(res != QMessageBox::Cancel) { \
+            unsavedChanges = false; \
             code \
+            unsavedChanges = false; \
         } \
     } \
     else { \
@@ -94,10 +98,11 @@ void WindowManager::updateGraph() {
     if(openedGraph) {
         graph = qobject_cast<KnowledgeGraph*>(engine.rootObjects().first()->findChild<QQuickItem*>("graph"));
         if (graph) {
-            connect(graph, &KnowledgeGraph::changed, this, [this]() {
-                unsavedChanges = true;
-                updateWindowTitle();
-            });
+            connect(graph, &KnowledgeGraph::customElementInserted, this, &changesMade);
+            connect(graph, &KnowledgeGraph::nodeRemoved, this, &changesMade);
+            connect(graph, &KnowledgeGraph::onEdgeRemoved, this, &changesMade);
+            connect(graph, &KnowledgeGraph::nodeMoved, this, &changesMade);
+            connect(graph, &KnowledgeGraph::nodeResized, this, &changesMade);
         }
     }
     else {
@@ -168,11 +173,11 @@ void WindowManager::newFile() {
         openedGraph = true;
         unsavedChanges = false;
         
-        // TODO
-        
         updateWindowTitle();
         updateView();
         updateGraph();
+
+        graph->clearGraph();
     )
 }
 
@@ -229,4 +234,9 @@ void WindowManager::closeFile() {
 bool WindowManager::checkClose() {
     SAVE_PROMPT_GUARD(return true;)
     return false;
+}
+
+void WindowManager::changesMade() {
+    unsavedChanges = true;
+    updateWindowTitle();
 }

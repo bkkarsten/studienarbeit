@@ -14,41 +14,19 @@ class CustomGraphView : public qan::GraphView {
     QML_ELEMENT
 
 public:
-    CustomGraphView(QQuickItem* parent = nullptr) 
-        : qan::GraphView(parent)
-        , clickCount(0) 
-    {
-        clickTimer.setInterval(200); // Time interval in milliseconds
-        clickTimer.setSingleShot(true);
-        connect(&clickTimer, &QTimer::timeout, this, &CustomGraphView::handleSingleClick);
-    }
+    CustomGraphView(QQuickItem* parent = nullptr);
 
 signals:
     void viewClicked(QPointF pos, bool shift);
     void viewDoubleClicked(QPointF pos, bool shift);
 
 protected:
-    virtual void navigableClicked(QPointF pos, QPointF globalPos) override {
-        QPointF viewPos(pos.x() - getContainerItem()->x(), pos.y() - getContainerItem()->y());
-        clickCount += 1;
-        if (clickCount == 1) {
-            clickTimer.start();
-            lastClickPos = viewPos;
-        } else if (clickCount == 2) {
-            clickTimer.stop();
-            Qt::KeyboardModifiers mods = QGuiApplication::queryKeyboardModifiers();
-            emit viewDoubleClicked(viewPos, mods & Qt::ShiftModifier);
-            clickCount = 0;
-        }
-        qan::GraphView::navigableClicked(pos, globalPos);
-    }
+    virtual void navigableClicked(QPointF pos, QPointF globalPos) override;
+
+    virtual void keyPressEvent(QKeyEvent* event) override;
 
 private slots:
-    void handleSingleClick() {
-        Qt::KeyboardModifiers mods = QGuiApplication::queryKeyboardModifiers();
-        emit viewClicked(lastClickPos, mods & Qt::ShiftModifier);
-        clickCount = 0;
-    }
+    void handleSingleClick();
 
 private:
     QTimer clickTimer;

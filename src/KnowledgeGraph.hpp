@@ -78,7 +78,7 @@ public:
                                      QList<ConceptNode*> answers = QList<ConceptNode*>());
 
 signals:
-    void changed();
+    void customElementInserted();
 
 };
 
