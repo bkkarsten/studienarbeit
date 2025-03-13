@@ -2,15 +2,21 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 // A column that can contain text and image content.
-Column {
-    id: contentColumn
-    objectName: "contentColumn"
-    anchors.fill: parent
+Rectangle {
+    color: "white"
+    anchors.centerIn: parent
+    height: contentColumn.height
+
+    Column {
+        id: contentColumn
+        objectName: "contentColumn"
+        width: parent.width
+    }
 
     // Add a text element to the column.
     function addTextElement(text) {
         var newText = Qt.createQmlObject(
-            'import QtQuick 2.15; Text { text: "' + text + '"; wrapMode: Text.Wrap }',
+            'import QtQuick 2.15; Text { text: "' + text + '"; wrapMode: Text.Wrap; width: parent.width; horizontalAlignment: Text.AlignHCenter }',
             contentColumn
         );
     }
@@ -45,5 +51,4 @@ Column {
             }
         }
     } 
-    
 }

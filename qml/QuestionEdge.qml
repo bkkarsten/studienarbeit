@@ -16,5 +16,6 @@ Qan.EdgeItem {
     Content {
         id: content
         objectName: "content"
+        width: 100
     }
 }

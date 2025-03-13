@@ -34,13 +34,6 @@ Qan.NodeItem {
         anchors.fill: parent
         nodeItem : relationNode
 
-        Content {
-            id: content
-            objectName: "content"
-            width: 0.5 * parent.width
-            height: 0.5 * parent.height
-        }
-
         symbol: Canvas {
             anchors.fill: parent
             z: 1
@@ -66,6 +59,12 @@ Qan.NodeItem {
                 ctx.fill()
             }
         }
+    }
+
+    Content {
+        id: content
+        objectName: "content"
+        width: 0.5 * parent.width
     }
 }
 

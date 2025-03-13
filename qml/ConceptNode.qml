@@ -15,10 +15,11 @@ Qan.NodeItem {
         anchors.fill: parent
         nodeItem : parent
         id: template
+    }
 
-        Content {
-            id: content
-            objectName: "content"
-        }
+    Content {
+        id: content
+        objectName: "content"
+        width: 0.9 * conceptNode.width
     }
 }
