@@ -6,7 +6,7 @@ import QuickQanava as Qan
 
 // An egde that represents a question and holds Content.
 Qan.EdgeItem {
-    id: customEdge
+    id: questionEdge
     Qan.EdgeTemplate {
         anchors.fill: parent
         edgeItem: parent
@@ -17,5 +17,17 @@ Qan.EdgeItem {
         id: content
         objectName: "content"
         width: 100
+
+        MouseArea {
+            anchors.fill: parent
+            onDoubleClicked: contentEditDialog.open()
+        }
+    }
+
+    onEdgeDoubleClicked: contentEditDialog.open()
+
+    ContentEditDialog {
+        id: contentEditDialog
+        contentOwner: edge
     }
 }

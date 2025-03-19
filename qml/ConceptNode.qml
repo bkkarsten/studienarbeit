@@ -22,4 +22,11 @@ Qan.NodeItem {
         objectName: "content"
         width: 0.9 * conceptNode.width
     }
+
+    onNodeDoubleClicked: contentEditDialog.open()
+
+    ContentEditDialog {
+        id: contentEditDialog
+        contentOwner: node
+    }
 }

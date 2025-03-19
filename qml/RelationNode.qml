@@ -66,6 +66,13 @@ Qan.NodeItem {
         objectName: "content"
         width: 0.5 * parent.width
     }
+
+    onNodeDoubleClicked: contentEditDialog.open()
+
+    ContentEditDialog {
+        id: contentEditDialog
+        contentOwner: node
+    }
 }
 
 // TAKEN FROM THE QUICKQANAVA SAMPLES:
