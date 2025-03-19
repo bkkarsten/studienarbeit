@@ -37,7 +37,7 @@ public:
 /**
  * @brief Macro that can be used in a class to give it functionality for managing Content.
  * @param content_member The name of the member variable that will store the Content object.
- * @param get_content_item The name of the method that will return the QQuickItem that represents the content.
+ * @param get_content_item A method that returns the QQuickItem that represents the content.
  */
 #define CONTENTOWNER(content_member, get_content_item) \
 private: \

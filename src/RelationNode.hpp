@@ -11,11 +11,17 @@
 class RelationNode : public NodeBase
                    , public Question
 {
+    Q_OBJECT
 private:
     QQuickItem* getContentItem() override;
     boost::json::object propertiesToJson() override;
     void propertiesLoadJson(boost::json::object json) override;
+signals:
+    void contentChanged();
+
 public:
+    Q_PROPERTY(QString contentTextForm READ getContentTextForm WRITE setContentTextForm NOTIFY contentChanged);
+
     RelationNode(QObject* parent = nullptr);
 
     boost::json::string getTypeName() override { return "RelationNode"; }

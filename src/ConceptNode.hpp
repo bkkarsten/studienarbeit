@@ -15,8 +15,11 @@ private:
     boost::json::object propertiesToJson() override;
     void propertiesLoadJson(boost::json::object json) override;
     QQuickItem* getContentItem();
+signals:
+    void contentChanged();
     
 CONTENTOWNER(content, getContentItem);
+Q_PROPERTY(QString contentTextForm READ getContentTextForm WRITE setContentTextForm NOTIFY contentChanged);
 
 public:
     ConceptNode(QObject* parent = nullptr);

@@ -10,11 +10,17 @@
 class QuestionEdge : public EdgeBase
                    , public Question 
 {
+    Q_OBJECT
 private:
     QQuickItem* getContentItem() override;
     boost::json::object propertiesToJson() override;
     void propertiesLoadJson(boost::json::object json) override;
+signals:
+    void contentChanged();
+
 public:
+    Q_PROPERTY(QString contentTextForm READ getContentTextForm WRITE setContentTextForm NOTIFY contentChanged);
+    
     QuestionEdge(QObject* parent = nullptr) : EdgeBase(parent) {}
     
     boost::json::string getTypeName() override { return "QuestionEdge"; }
