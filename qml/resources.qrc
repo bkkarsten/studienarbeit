@@ -10,5 +10,6 @@
         <file>RelationNode.qml</file>
         <file>CustomRectNodeTemplate.qml</file>
         <file>CustomCanvasNodeTemplate.qml</file>
+        <file>ContentEditDialog.qml</file>
     </qresource>
 </RCC>
