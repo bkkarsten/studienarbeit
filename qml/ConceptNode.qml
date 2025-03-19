@@ -11,7 +11,7 @@ Qan.NodeItem {
     width:60
     height:60
 
-    Qan.RectNodeTemplate {
+    CustomRectNodeTemplate {
         anchors.fill: parent
         nodeItem : parent
         id: template

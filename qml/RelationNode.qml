@@ -29,7 +29,7 @@ Qan.NodeItem {
         relationNode.setBoundingShape(symbolPolygon)
     }
 
-    Qan.CanvasNodeTemplate {
+    CustomCanvasNodeTemplate {
         id: template
         anchors.fill: parent
         nodeItem : relationNode
