@@ -16,7 +16,11 @@ QPair<QStringList, QStringList> Content::separate(const QString& string) {
         int matchEnd = match.capturedEnd();
 
         if(matchStart > lastIndex) {
-            elements.append(string.mid(lastIndex, matchStart - lastIndex));
+            QString text = string.mid(lastIndex, matchStart - lastIndex);
+            if(text[0] == '\n') {
+                text.remove(0, 1);
+            }
+            elements.append(text);
             types.append("text");
         }
 
@@ -29,7 +33,11 @@ QPair<QStringList, QStringList> Content::separate(const QString& string) {
     }
 
     if (lastIndex < string.length()) {
-        elements.append(string.mid(lastIndex));
+        QString text = string.mid(lastIndex);
+        if(text[0] == '\n') {
+            text.remove(0, 1);
+        }
+        elements.append(text);
         types.append("text");
     }
 

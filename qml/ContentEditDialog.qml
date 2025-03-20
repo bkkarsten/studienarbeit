@@ -1,5 +1,7 @@
 import QtQuick
+import QtCore
 import QtQuick.Controls 2.5
+import QtQuick.Dialogs
 
 import QuickQanava as Qan
 
@@ -35,6 +37,7 @@ Dialog {
         }
         Button {
             text: "Insert Image"
+            onClicked: fileDialog.open()
         }
     }
 
@@ -47,6 +50,18 @@ Dialog {
     onAccepted: {
         if (contentOwner) {
             contentOwner.contentTextForm = contentTextField.text;
+        }
+    }
+
+    FileDialog {
+        id: fileDialog
+        title: "Choose an image"
+        currentFolder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
+        nameFilters: ["Image files (*.png *.jpg *.bmp)", "All files (*)"]
+        onAccepted: {
+            let path = fileDialog.selectedFile.toString();
+            path = path.replace(/^(file:\/{3})/,"");
+            contentTextField.insert(contentTextField.cursorPosition, "img(" + path + ")");
         }
     }
 }
