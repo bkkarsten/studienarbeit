@@ -103,6 +103,7 @@ void WindowManager::updateGraph() {
             connect(graph, &KnowledgeGraph::onEdgeRemoved, this, &changesMade);
             connect(graph, &KnowledgeGraph::nodeMoved, this, &changesMade);
             connect(graph, &KnowledgeGraph::nodeResized, this, &changesMade);
+            connect(graph, &KnowledgeGraph::contentEdited, this, &changesMade);
         }
     }
     else {
@@ -158,11 +159,12 @@ void WindowManager::openFile() {
         openedFile = true;
         openedFileName = QString::fromStdString(fileName);
         openedGraph = true;
-        updateWindowTitle();
         updateView();
         updateGraph();
         graph->loadFile(file);
         file.close();
+        unsavedChanges = false;
+        updateWindowTitle();
     )
 }
 
