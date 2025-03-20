@@ -25,6 +25,12 @@ Dialog {
                 background: Rectangle {
                     color: "white"
                 }
+
+                Keys.onPressed: (event) => {
+                    if ((event.key === Qt.Key_Enter || event.key === Qt.Key_Return) && event.modifiers & Qt.ControlModifier) {
+                        contentEditDialog.accept();
+                    }
+                }
             }
         }
         Button {
