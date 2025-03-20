@@ -18,9 +18,12 @@ private:
     QDateTime lastCorrectlyAnswered;
     QDateTime lastChanged;
 
+    Content content; 
     virtual QQuickItem* getContentItem() = 0; 
-
-CONTENTOWNER(content, getContentItem);
+    virtual void emitContentChangedSignal() = 0;
+public: 
+    const QString& getContentTextForm() const { return content.getTextForm(); }
+    void setContentTextForm(const QString& textForm);
 
 protected:
     boost::json::object questionToJson();
@@ -36,7 +39,7 @@ public:
     
     void answered() { lastAnswered = QDateTime::currentDateTime(); }
     void correctlyAnswered() { lastCorrectlyAnswered = QDateTime::currentDateTime(); }
-    void changed() { lastChanged = QDateTime::currentDateTime(); }
+    void changed();
     /**
      * @brief Displays the question. TODO!
      */

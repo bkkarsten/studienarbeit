@@ -24,12 +24,25 @@ ConceptNode::ConceptNode(QObject* parent)
 {
 }
 
+void ConceptNode::setContentTextForm(const QString &textForm) { 
+    bool changes = (textForm != getContentTextForm()); 
+    content.setTextForm(textForm, getContentItem()); 
+    if(changes) { 
+        changed();
+    } 
+} 
+
 QQmlComponent* ConceptNode::delegate(QQmlEngine& engine, QObject* parent) {
     Q_UNUSED(parent)
     static std::unique_ptr<QQmlComponent> delegate;
     if (!delegate)
         delegate = std::make_unique<QQmlComponent>(&engine, "qrc:/ConceptNode.qml");
     return delegate.get();
+}
+
+void ConceptNode::changed() {
+    lastChanged = QDateTime::currentDateTime();
+    emit contentChanged();
 }
 
 QList<Question*> ConceptNode::getOutgoingQuestions() {

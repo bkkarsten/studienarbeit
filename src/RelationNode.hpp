@@ -16,6 +16,7 @@ private:
     QQuickItem* getContentItem() override;
     boost::json::object propertiesToJson() override;
     void propertiesLoadJson(boost::json::object json) override;
+    void emitContentChangedSignal() override { emit contentChanged(); }
 signals:
     void contentChanged();
 
