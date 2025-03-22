@@ -13,6 +13,13 @@ Qan.GraphView {
         id: graph
         objectName: "graph"
         anchors.fill: parent
+
+        connectorEnabled: true
+        connectorCreateDefaultEdge: false
+        onConnectorRequestEdgeCreation: (src, dest) => {
+            graph.insertCorrectEdge(src, dest);
+        }
+
     }
     
     Component.onCompleted: {

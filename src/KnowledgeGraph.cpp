@@ -99,6 +99,26 @@ ConnectorEdge* KnowledgeGraph::insertConnectorEdge(RelationNode* src, ConceptNod
     return insertCustomEdge<ConnectorEdge>(src, dest);
 }
 
+Q_INVOKABLE EdgeBase* KnowledgeGraph::insertCorrectEdge(NodeBase* src, NodeBase* dest) {
+    if(find_edge(src, dest) != nullptr) {
+        return nullptr; // prevent insertion of dupliate edges
+    }
+    ConceptNode* conceptSrc = dynamic_cast<ConceptNode*>(src);
+    ConceptNode* conceptDest = dynamic_cast<ConceptNode*>(dest);
+    RelationNode* relationSrc = dynamic_cast<RelationNode*>(src);
+    RelationNode* relationDest = dynamic_cast<RelationNode*>(dest);
+    if(conceptSrc && conceptDest) {
+        return insertQuestionEdge(conceptSrc, conceptDest);
+    }
+    else if(conceptSrc && relationDest) {
+        return insertConnectorEdge(conceptSrc, relationDest);
+    }
+    else if(relationSrc && conceptDest) {
+        return insertConnectorEdge(relationSrc, conceptDest);
+    }
+    return nullptr;
+}
+
 RelationNode* KnowledgeGraph::insertRelationNode(QString contentTextForm, qreal x, qreal y, qreal width, qreal height, QList<ConceptNode*> context, QList<ConceptNode*> answers) {
     RelationNode* node = insertCustomNode<RelationNode>();
     if(!node) {

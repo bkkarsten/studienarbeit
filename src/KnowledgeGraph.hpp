@@ -87,6 +87,14 @@ public:
      */
     Q_INVOKABLE ConnectorEdge* insertConnectorEdge(RelationNode* src, ConceptNode* dest);
     /**
+     * @brief Inserts the correct node type based on the type of src and dest, only if there is no such edge yet. 
+     * QuestionEdge is inserted between two ConceptNodes; ConnectorEdge is inserted between ConceptNode and RelationNode.
+     * Otherwise, no edge is inserted.
+     * @param src The source node of the edge.
+     * @param dest The destination node of the edge.
+     */
+    Q_INVOKABLE EdgeBase* insertCorrectEdge(NodeBase* src, NodeBase* dest);
+    /**
      * @brief Inserts a RelationNode into the graph and returns a pointer to it.
      * @param contentTextForm The content of the node represented by text.
      * @param x The x coordinate of the node.
