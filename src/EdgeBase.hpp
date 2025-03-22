@@ -6,11 +6,13 @@
 #include <boost/json.hpp>
 
 class Question;
+class NodeBase;
 
 /**
  * @brief Base class for edges in the graph. 
  */
 class EdgeBase : public qan::Edge {
+    Q_OBJECT
 private:
     /**
      * @brief Convert the properties specific to the edge implementation to a JSON object.
@@ -20,6 +22,9 @@ private:
      * @brief Load the properties specific to the edge implementation from a JSON object.
      */ 
     virtual void propertiesLoadJson(boost::json::object json) = 0;
+
+    virtual bool validSource(NodeBase* src) = 0;
+    virtual bool validDestination(NodeBase* dest) = 0;
 public:
     EdgeBase(QObject* parent) : qan::Edge(parent) {}
     /**
@@ -44,6 +49,19 @@ public:
      * @brief Load the node from a JSON object.
      */
     virtual void loadJson(boost::json::object json);
+
+    /**
+     * @brief Change the source of the edge.
+     * @param target The new source.
+     * @return True if the source was changed.
+     */
+    Q_INVOKABLE bool changeSource(QQuickItem* target);
+    /**
+     * @brief Change the destination of the edge. 
+     * @param target The new destination.
+     * @return True if the destination was changed.
+     */
+    Q_INVOKABLE bool changeDestination(QQuickItem* target);
 };
 
 

@@ -10,6 +10,10 @@ class ConnectorEdge : public EdgeBase {
 private:
     boost::json::object propertiesToJson() override { return boost::json::object(); }
     void propertiesLoadJson(boost::json::object json) override {}
+
+    bool validSource(NodeBase* src) override;
+    bool validDestination(NodeBase* dest) override; 
+
 public:
     ConnectorEdge(QObject* parent = nullptr) : EdgeBase(parent) {}
 

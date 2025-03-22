@@ -11,5 +11,7 @@
         <file>CustomRectNodeTemplate.qml</file>
         <file>CustomCanvasNodeTemplate.qml</file>
         <file>ContentEditDialog.qml</file>
+        <file>EdgeMover.qml</file>
+        <file>DraggableRect.qml</file>
     </qresource>
 </RCC>

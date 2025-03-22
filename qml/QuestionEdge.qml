@@ -24,6 +24,10 @@ Qan.EdgeItem {
         }
     }
 
+    EdgeMover {
+        edgeItem: questionEdge
+    }
+
     onEdgeDoubleClicked: contentEditDialog.open()
 
     ContentEditDialog {

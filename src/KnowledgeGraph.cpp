@@ -99,7 +99,7 @@ ConnectorEdge* KnowledgeGraph::insertConnectorEdge(RelationNode* src, ConceptNod
     return insertCustomEdge<ConnectorEdge>(src, dest);
 }
 
-Q_INVOKABLE EdgeBase* KnowledgeGraph::insertCorrectEdge(NodeBase* src, NodeBase* dest) {
+EdgeBase* KnowledgeGraph::insertCorrectEdge(NodeBase* src, NodeBase* dest) {
     if(find_edge(src, dest) != nullptr) {
         return nullptr; // prevent insertion of dupliate edges
     }

@@ -26,3 +26,19 @@ Question* ConnectorEdge::getQuestion() {
     }
     return nullptr;
 }
+
+bool ConnectorEdge::validSource(NodeBase* src) {
+    ConceptNode* conceptSrc = dynamic_cast<ConceptNode*>(src);
+    RelationNode* relationSrc = dynamic_cast<RelationNode*>(src);
+    ConceptNode* conceptDest = dynamic_cast<ConceptNode*>(getDestination());
+    RelationNode* relationDest = dynamic_cast<RelationNode*>(getDestination());
+    return (conceptSrc && relationDest) || (relationSrc && conceptDest);
+}
+
+bool ConnectorEdge::validDestination(NodeBase* dest) {
+    ConceptNode* conceptDest = dynamic_cast<ConceptNode*>(dest);
+    RelationNode* relationDest = dynamic_cast<RelationNode*>(dest);
+    ConceptNode* conceptSrc = dynamic_cast<ConceptNode*>(getSource());
+    RelationNode* relationSrc = dynamic_cast<RelationNode*>(getSource());
+    return (conceptSrc && relationDest) || (relationSrc && conceptDest);
+}
