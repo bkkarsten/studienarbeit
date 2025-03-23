@@ -42,3 +42,11 @@ bool ConnectorEdge::validDestination(NodeBase* dest) {
     RelationNode* relationSrc = dynamic_cast<RelationNode*>(getSource());
     return (conceptSrc && relationDest) || (relationSrc && conceptDest);
 }
+
+QQmlComponent* ConnectorEdge::delegate(QQmlEngine& engine, QObject* parent) {
+    Q_UNUSED(parent)
+    static std::unique_ptr<QQmlComponent> delegate;
+    if (!delegate)
+        delegate = std::make_unique<QQmlComponent>(&engine, "qrc:/ConnectorEdge.qml");
+    return delegate.get();
+}

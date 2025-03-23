@@ -17,6 +17,11 @@ private:
 public:
     ConnectorEdge(QObject* parent = nullptr) : EdgeBase(parent) {}
 
+    /**
+     * @brief Returns the QML item associated with this node type.
+     */
+    static QQmlComponent* delegate(QQmlEngine& engine, QObject* parent = nullptr);
+
     boost::json::string getTypeName() override { return "ConnectorEdge"; }
     /**
      * @brief Whether the edge is valid. True if out of the source and destination nodes,

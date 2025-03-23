@@ -13,5 +13,6 @@
         <file>ContentEditDialog.qml</file>
         <file>EdgeMover.qml</file>
         <file>DraggableRect.qml</file>
+        <file>ConnectorEdge.qml</file>
     </qresource>
 </RCC>
