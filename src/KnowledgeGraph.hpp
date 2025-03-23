@@ -9,34 +9,20 @@
 #include "ConnectorEdge.hpp"
 
 
-template <typename T>
-concept HasContentChangedSignal = requires(T t) {
-    { t.contentChanged() }; 
-};
-
-
 class KnowledgeGraph : public qan::Graph {
     Q_OBJECT
     QML_ELEMENT
 
 private:
     /**
-     * @brief Inserts a node of a given type and if available, connects its contentChanged signal to the unsaved changes tracking.
+     * @brief Inserts a node of a given type and if available, connects its anythingChanged signal to the unsaved changes tracking.
      */
     template<typename NodeType>
-    requires HasContentChangedSignal<NodeType>
-    NodeType* insertCustomNode();
-    template<typename NodeType>
-    requires (!HasContentChangedSignal<NodeType>)
     NodeType* insertCustomNode();
     /**
-     * @brief Inserts an edge of a given type and if available, connects its contentChanged signal to the unsaved changes tracking.
+     * @brief Inserts an edge of a given type and if available, connects its anythingChanged signal to the unsaved changes tracking.
      */
     template<typename EdgeType>
-    requires HasContentChangedSignal<EdgeType>
-    EdgeType* insertCustomEdge(qan::Node* src, qan::Node* dest);
-    template<typename EdgeType>
-    requires (!HasContentChangedSignal<EdgeType>)
     EdgeType* insertCustomEdge(qan::Node* src, qan::Node* dest);
 
 public:
@@ -114,7 +100,7 @@ public:
 
 signals:
     void customElementInserted();
-    void contentEdited();
+    void elementChanged();
 
 };
 

@@ -19,7 +19,7 @@ private:
     bool validSource(NodeBase* src) override;
     bool validDestination(NodeBase* dest) override;
 
-    void emitContentChangedSignal() override { emit contentChanged(); }
+    void emitContentChangedSignal() override { emit contentChanged(); emit anythingChanged(); }
 signals:
     void contentChanged();
 

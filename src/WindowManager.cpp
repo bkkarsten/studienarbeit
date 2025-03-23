@@ -103,7 +103,7 @@ void WindowManager::updateGraph() {
             connect(graph, &KnowledgeGraph::onEdgeRemoved, this, &changesMade);
             connect(graph, &KnowledgeGraph::nodeMoved, this, &changesMade);
             connect(graph, &KnowledgeGraph::nodeResized, this, &changesMade);
-            connect(graph, &KnowledgeGraph::contentEdited, this, &changesMade);
+            connect(graph, &KnowledgeGraph::elementChanged, this, &changesMade);
         }
     }
     else {

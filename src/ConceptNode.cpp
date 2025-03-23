@@ -43,6 +43,7 @@ QQmlComponent* ConceptNode::delegate(QQmlEngine& engine, QObject* parent) {
 void ConceptNode::changed() {
     lastChanged = QDateTime::currentDateTime();
     emit contentChanged();
+    emit anythingChanged();
 }
 
 QList<Question*> ConceptNode::getOutgoingQuestions() {

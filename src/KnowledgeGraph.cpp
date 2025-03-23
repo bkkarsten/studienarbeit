@@ -28,34 +28,20 @@ bool KnowledgeGraph::valid() {
 }
 
 template<typename NodeType>
-requires HasContentChangedSignal<NodeType>
 NodeType* KnowledgeGraph::insertCustomNode() {
     NodeType* node = insertNode<NodeType>();
     if(node != nullptr) {
-        connect(node, &NodeType::contentChanged, this, [&](){ emit contentEdited(); });
+        connect(node, &NodeType::anythingChanged, this, [&](){ emit elementChanged(); });
     }
-    return node;
-}
-template<typename NodeType>
-requires (!HasContentChangedSignal<NodeType>)
-NodeType* KnowledgeGraph::insertCustomNode() {
-    NodeType* node = insertNode<NodeType>();
     return node;
 }
 
 template<typename EdgeType>
-requires HasContentChangedSignal<EdgeType>
 EdgeType* KnowledgeGraph::insertCustomEdge(qan::Node* src, qan::Node* dest) {
     EdgeType* edge = dynamic_cast<EdgeType*>(insertEdge<EdgeType>(*src, dest));
     if(edge != nullptr) {
-        connect(edge, &EdgeType::contentChanged, this, [&](){ emit contentEdited(); });
+        connect(edge, &EdgeType::anythingChanged, this, [&](){ emit elementChanged(); });
     }
-    return edge;
-}
-template<typename EdgeType>
-requires (!HasContentChangedSignal<EdgeType>)
-EdgeType* KnowledgeGraph::insertCustomEdge(qan::Node* src, qan::Node* dest) {
-    EdgeType* edge = dynamic_cast<EdgeType*>(insertEdge<EdgeType>(*src, dest));
     return edge;
 }
 

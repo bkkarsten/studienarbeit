@@ -62,6 +62,8 @@ public:
      * @return True if the destination was changed.
      */
     Q_INVOKABLE bool changeDestination(QQuickItem* target);
+signals:
+    void anythingChanged();
 };
 
 

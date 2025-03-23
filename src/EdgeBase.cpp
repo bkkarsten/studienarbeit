@@ -28,6 +28,7 @@ bool EdgeBase::changeSource(QQuickItem* target) {
     }
     set_src(node);
     getItem()->setSourceItem(nodeItem);
+    emit anythingChanged();
     return true;
 }
 
@@ -45,5 +46,6 @@ bool EdgeBase::changeDestination(QQuickItem* target) {
     }
     set_dst(node);
     getItem()->setDestinationItem(nodeItem);
+    emit anythingChanged();
     return true;
 }

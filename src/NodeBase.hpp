@@ -10,6 +10,7 @@ using boost::json::object;
  * @brief Base class for nodes in the graph.
  */
 class NodeBase : public qan::Node {
+    Q_OBJECT
 private:
     /**
      * @brief Convert the properties specific to the node implementation to a JSON object.
@@ -40,6 +41,8 @@ public:
      * @brief Load the node from a JSON object.
      */
     virtual void loadJson(boost::json::object json);
+signals:
+    void anythingChanged();
 };
 
 
