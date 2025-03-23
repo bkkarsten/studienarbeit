@@ -17,11 +17,14 @@ private:
     boost::json::object propertiesToJson() override;
     void propertiesLoadJson(boost::json::object json) override;
     void emitContentChangedSignal() override { emit contentChanged(); emit anythingChanged(); }
+    void emitWeightChangedSignal() override { emit weightChanged(); emit anythingChanged(); }
 signals:
     void contentChanged();
+    void weightChanged();
 
 public:
     Q_PROPERTY(QString contentTextForm READ getContentTextForm WRITE setContentTextForm NOTIFY contentChanged);
+    Q_PROPERTY(qreal customWeight READ getCustomWeight WRITE setCustomWeight NOTIFY weightChanged);
 
     RelationNode(QObject* parent = nullptr);
 

@@ -7,6 +7,7 @@ import QuickQanava as Qan
 
 Dialog {
     property var contentOwner: null
+    property bool editCustomWeight: false
 
     id: contentEditDialog
     title: "Edit Content"
@@ -39,17 +40,33 @@ Dialog {
             text: "Insert Image"
             onClicked: fileDialog.open()
         }
+        Label {
+            text: "Question weight: " + customWeightSlider.expValue.toFixed(2)
+            visible: editCustomWeight
+        }
+        ExponentialSlider {
+            id: customWeightSlider
+            visible: editCustomWeight
+            min: 0.1
+            max: 10
+        }
     }
 
     onOpened: {
         if (contentOwner) {
             contentTextField.text = contentOwner.contentTextForm;
+            if(editCustomWeight) {
+                customWeightSlider.setExpValue(contentOwner.customWeight);
+            }
         }
     }
 
     onAccepted: {
         if (contentOwner) {
             contentOwner.contentTextForm = contentTextField.text;
+            if (editCustomWeight) {
+                contentOwner.customWeight = customWeightSlider.expValue;
+            }
         }
     }
 

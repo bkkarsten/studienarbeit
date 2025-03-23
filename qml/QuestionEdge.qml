@@ -33,5 +33,6 @@ Qan.EdgeItem {
     ContentEditDialog {
         id: contentEditDialog
         contentOwner: edge
+        editCustomWeight: true
     }
 }

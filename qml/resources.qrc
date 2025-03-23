@@ -14,5 +14,6 @@
         <file>EdgeMover.qml</file>
         <file>DraggableRect.qml</file>
         <file>ConnectorEdge.qml</file>
+        <file>ExponentialSlider.qml</file>
     </qresource>
 </RCC>

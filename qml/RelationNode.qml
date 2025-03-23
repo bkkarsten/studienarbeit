@@ -72,6 +72,7 @@ Qan.NodeItem {
     ContentEditDialog {
         id: contentEditDialog
         contentOwner: node
+        editCustomWeight: true
     }
 }
 

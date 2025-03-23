@@ -28,7 +28,15 @@ void Question::questionLoadJson(boost::json::object json) {
     setContentTextForm(QString::fromStdString(std::string(json["content"].as_string())));
 }
 
-void Question::changed() { 
+void Question::setCustomWeight(float customWeight) {
+    bool changes = customWeight != this->customWeight;
+    this->customWeight = customWeight;
+    if(changes) {
+        emitWeightChangedSignal();
+    }
+}
+
+void Question::changed() {
     lastChanged = QDateTime::currentDateTime();
     emitContentChangedSignal();
 }
