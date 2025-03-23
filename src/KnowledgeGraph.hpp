@@ -8,7 +8,9 @@
 #include "RelationNode.hpp"
 #include "ConnectorEdge.hpp"
 
-
+/**
+ * @brief The knowledge graph.
+ */
 class KnowledgeGraph : public qan::Graph {
     Q_OBJECT
     QML_ELEMENT

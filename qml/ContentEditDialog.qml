@@ -5,6 +5,7 @@ import QtQuick.Dialogs
 
 import QuickQanava as Qan
 
+// A dialog that can edit the content of a node or edge and the custom weight of a question.
 Dialog {
     property var contentOwner: null
     property bool editCustomWeight: false

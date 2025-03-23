@@ -4,7 +4,7 @@
 #include <QString>
 
 /**
- * @brief Returns (and creates if not present) a subdirectory of the users documents folder with a name specified in config.hpp.
+ * @brief Returns (and creates if not present) a subdirectory of the user's documents folder with a name specified in config.hpp.
  */
 QString initialiseDirectory();
 

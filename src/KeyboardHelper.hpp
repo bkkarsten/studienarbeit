@@ -5,6 +5,9 @@
 #include <QGuiApplication>
 #include <qqml.h>
 
+/**
+ * @brief A helper class that exposes the keyboard modifiers to QML.
+ */
 class KeyboardHelper : public QObject {
     Q_OBJECT
     QML_ELEMENT

@@ -2,6 +2,7 @@ import QtQuick
 import QtCore
 import QtQuick.Controls 2.5
 
+// A slider that operates on an exponential scale.
 Slider {
     id: exponentialSlider
     value: 0

@@ -8,6 +8,9 @@
 
 class Question;
 
+/**
+ * @brief A node in the graph that represents a concept.
+ */
 class ConceptNode : public NodeBase {
     Q_OBJECT
 private:

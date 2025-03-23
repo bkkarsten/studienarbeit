@@ -10,6 +10,9 @@
 
 class ConceptNode;
 
+/**
+ * @brief An interface for questions.
+ */
 class Question {
 private:
     float proficiency;

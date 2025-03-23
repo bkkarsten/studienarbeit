@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQml
 
+// When added to an edge item, allows the user to drag that edge to new nodes the destination or source of the edge.
 Item {
     property var edgeItem: null
     property var boxSize: 20
