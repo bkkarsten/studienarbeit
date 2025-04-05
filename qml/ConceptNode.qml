@@ -11,7 +11,7 @@ Qan.NodeItem {
     width:60
     height:60
 
-    Qan.RectNodeTemplate {
+    CustomRectNodeTemplate {
         anchors.fill: parent
         nodeItem : parent
         id: template
@@ -21,5 +21,12 @@ Qan.NodeItem {
         id: content
         objectName: "content"
         width: 0.9 * conceptNode.width
+    }
+
+    onNodeDoubleClicked: contentEditDialog.open()
+
+    ContentEditDialog {
+        id: contentEditDialog
+        contentOwner: node
     }
 }

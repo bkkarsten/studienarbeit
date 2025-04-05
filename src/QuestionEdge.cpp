@@ -36,3 +36,11 @@ QList<ConceptNode*> QuestionEdge::getAnswers() {
     }
     return QList<ConceptNode*>();
 }
+
+bool QuestionEdge::validSource(NodeBase* src) {
+    return dynamic_cast<ConceptNode*>(src) != nullptr;
+}
+
+bool QuestionEdge::validDestination(NodeBase* dest) {
+    return dynamic_cast<ConceptNode*>(dest) != nullptr;
+}

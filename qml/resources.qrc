@@ -8,5 +8,12 @@
         <file>Content.qml</file>
         <file>QuestionEdge.qml</file>
         <file>RelationNode.qml</file>
+        <file>CustomRectNodeTemplate.qml</file>
+        <file>CustomCanvasNodeTemplate.qml</file>
+        <file>ContentEditDialog.qml</file>
+        <file>EdgeMover.qml</file>
+        <file>DraggableRect.qml</file>
+        <file>ConnectorEdge.qml</file>
+        <file>ExponentialSlider.qml</file>
     </qresource>
 </RCC>

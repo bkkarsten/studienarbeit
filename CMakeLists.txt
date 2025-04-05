@@ -28,6 +28,8 @@ set(SOURCES
     src/Question.cpp
     src/NodeBase.cpp
     src/EdgeBase.cpp
+    src/KnowledgeGraph.cpp
+    src/KeyboardHelper.cpp
 )
 
 add_executable(studar ${SOURCES})
@@ -45,8 +47,8 @@ target_sources(studar PRIVATE ${QRC_FILES})
 target_link_libraries(studar PRIVATE QuickQanava QuickQanavaplugin Qt6::Core Qt6::Gui Qt6::Qml Qt6::Quick Qt6::Widgets)
 
 qt_policy(SET QTP0001 NEW)
-qt_add_qml_module(studar
-    URI studar
-    VERSION 1.0
-    SOURCES src/KnowledgeGraph.hpp src/KnowledgeGraph.cpp
-)
+# qt_add_qml_module(studar
+#     URI studar
+#     VERSION 1.0
+#     SOURCES src/KnowledgeGraph.hpp src/KnowledgeGraph.cpp src/KeyboardHelper.hpp
+# )

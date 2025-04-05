@@ -2,9 +2,8 @@
 #include "NodeBase.hpp"
 #include "EdgeBase.hpp"
 
-#include <boost/graph/graphml.hpp>
-
 #include <fstream>
+#include <type_traits>
 
 bool KnowledgeGraph::valid() {
     for(qan::Node* node : get_nodes()) {
@@ -28,8 +27,26 @@ bool KnowledgeGraph::valid() {
     return true;
 }
 
+template<typename NodeType>
+NodeType* KnowledgeGraph::insertCustomNode() {
+    NodeType* node = insertNode<NodeType>();
+    if(node != nullptr) {
+        connect(node, &NodeType::anythingChanged, this, [&](){ emit elementChanged(); });
+    }
+    return node;
+}
+
+template<typename EdgeType>
+EdgeType* KnowledgeGraph::insertCustomEdge(qan::Node* src, qan::Node* dest) {
+    EdgeType* edge = dynamic_cast<EdgeType*>(insertEdge<EdgeType>(*src, dest));
+    if(edge != nullptr) {
+        connect(edge, &EdgeType::anythingChanged, this, [&](){ emit elementChanged(); });
+    }
+    return edge;
+}
+
 ConceptNode* KnowledgeGraph::insertConceptNode(QString contentTextForm, qreal x, qreal y, qreal width, qreal height) {
-    ConceptNode* node = insertNode<ConceptNode>();
+    ConceptNode* node = insertCustomNode<ConceptNode>();
     if(!node) {
         return nullptr;
     }
@@ -45,27 +62,51 @@ ConceptNode* KnowledgeGraph::insertConceptNode(QString contentTextForm, qreal x,
             item->setHeight(height);
         }
     }
+    emit customElementInserted();
     return node;
 }
 
 QuestionEdge* KnowledgeGraph::insertQuestionEdge(ConceptNode* src, ConceptNode* dest, QString contentTextForm) {
-    QuestionEdge* edge = dynamic_cast<QuestionEdge*>(insertEdge<QuestionEdge>(*src, dest));
+    QuestionEdge* edge = insertCustomEdge<QuestionEdge>(src, dest);
     if(edge) {
         edge->setContentTextForm(contentTextForm);
     }
+    emit customElementInserted();
     return edge;
 }
 
 ConnectorEdge* KnowledgeGraph::insertConnectorEdge(ConceptNode* src, RelationNode* dest) {
-    return dynamic_cast<ConnectorEdge*>(insertEdge<ConnectorEdge>(*src, dest));
+    emit customElementInserted();
+    return insertCustomEdge<ConnectorEdge>(src, dest);
 }
 
 ConnectorEdge* KnowledgeGraph::insertConnectorEdge(RelationNode* src, ConceptNode* dest) {
-    return dynamic_cast<ConnectorEdge*>(insertEdge<ConnectorEdge>(*src, dest));
+    emit customElementInserted();
+    return insertCustomEdge<ConnectorEdge>(src, dest);
+}
+
+EdgeBase* KnowledgeGraph::insertCorrectEdge(NodeBase* src, NodeBase* dest) {
+    if(find_edge(src, dest) != nullptr) {
+        return nullptr; // prevent insertion of dupliate edges
+    }
+    ConceptNode* conceptSrc = dynamic_cast<ConceptNode*>(src);
+    ConceptNode* conceptDest = dynamic_cast<ConceptNode*>(dest);
+    RelationNode* relationSrc = dynamic_cast<RelationNode*>(src);
+    RelationNode* relationDest = dynamic_cast<RelationNode*>(dest);
+    if(conceptSrc && conceptDest) {
+        return insertQuestionEdge(conceptSrc, conceptDest);
+    }
+    else if(conceptSrc && relationDest) {
+        return insertConnectorEdge(conceptSrc, relationDest);
+    }
+    else if(relationSrc && conceptDest) {
+        return insertConnectorEdge(relationSrc, conceptDest);
+    }
+    return nullptr;
 }
 
 RelationNode* KnowledgeGraph::insertRelationNode(QString contentTextForm, qreal x, qreal y, qreal width, qreal height, QList<ConceptNode*> context, QList<ConceptNode*> answers) {
-    RelationNode* node = insertNode<RelationNode>();
+    RelationNode* node = insertCustomNode<RelationNode>();
     if(!node) {
         return nullptr;
     }
@@ -87,6 +128,7 @@ RelationNode* KnowledgeGraph::insertRelationNode(QString contentTextForm, qreal 
     for(ConceptNode* a : answers) {
         ConnectorEdge* edge = insertConnectorEdge(node, a);
     }
+    emit customElementInserted();
     return node;
 }
 
@@ -131,10 +173,10 @@ void KnowledgeGraph::loadFile(std::ifstream& file) {
         boost::json::string type = jsonNode["type"].as_string();
         NodeBase* node = nullptr;
         if(type == conceptNodeTypeName) {
-            node = insertNode<ConceptNode>();
+            node = insertCustomNode<ConceptNode>();
         }
         else if(type == relationNodeTypeName) {
-            node = insertNode<RelationNode>();
+            node = insertCustomNode<RelationNode>();
         }
         if(node) {
             node->loadJson(jsonNode);
@@ -152,10 +194,10 @@ void KnowledgeGraph::loadFile(std::ifstream& file) {
         NodeBase* destNode = dynamic_cast<NodeBase*>(get_nodes().getContainer()[dest]);
         EdgeBase* edge = nullptr;
         if(type == questionEdgeTypeName) {
-            edge = dynamic_cast<QuestionEdge*>(insertEdge<QuestionEdge>(*srcNode, destNode));
+            edge = insertCustomEdge<QuestionEdge>(srcNode, destNode);
         }
         else if(type == connectorEdgeTypeName) {
-            edge = dynamic_cast<ConnectorEdge*>(insertEdge<ConnectorEdge>(*srcNode, destNode));
+            edge = insertCustomEdge<ConnectorEdge>(srcNode, destNode);
         }
         if(edge) {
             edge->loadJson(jsonEdge);

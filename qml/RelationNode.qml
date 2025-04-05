@@ -29,7 +29,7 @@ Qan.NodeItem {
         relationNode.setBoundingShape(symbolPolygon)
     }
 
-    Qan.CanvasNodeTemplate {
+    CustomCanvasNodeTemplate {
         id: template
         anchors.fill: parent
         nodeItem : relationNode
@@ -65,6 +65,14 @@ Qan.NodeItem {
         id: content
         objectName: "content"
         width: 0.5 * parent.width
+    }
+
+    onNodeDoubleClicked: contentEditDialog.open()
+
+    ContentEditDialog {
+        id: contentEditDialog
+        contentOwner: node
+        editCustomWeight: true
     }
 }
 

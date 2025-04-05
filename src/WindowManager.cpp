@@ -1,12 +1,14 @@
 #include "WindowManager.hpp"
 #include "config.hpp"
 
+#include "KnowledgeGraph.hpp"
+
 #include <QQmlProperty>
 #include <QQmlContext>
 #include <QPushButton>
 #include <QDebug>
 #include <QuickQanava>
-#include "KnowledgeGraph.hpp"
+
 
 /**
  * @brief If there are any unsaved changes, this will open a save dialog and execute the given code 
@@ -18,7 +20,9 @@
         savePrompt.exec(); \
         int res = savePrompt.result(); \
         if(res != QMessageBox::Cancel) { \
+            unsavedChanges = false; \
             code \
+            unsavedChanges = false; \
         } \
     } \
     else { \
@@ -40,7 +44,7 @@ WindowManager::WindowManager(QString defaultDir)
     if (engine.rootObjects().isEmpty()) {
         throw std::runtime_error("Root object not found.");
     }
-engine.addImportPath("external/QuickQanava/src");
+    engine.addImportPath("external/QuickQanava/src");
     QuickQanava::initialize(&engine);
     qmlWindow = qobject_cast<QQuickWindow*>(engine.rootObjects().first());
     qmlWindow->setTitle(WINDOW_TITLE);
@@ -80,14 +84,29 @@ void WindowManager::setView(QString source) {
     QQmlProperty::write(contentLoader, "source", source);
 }
 
-void WindowManager::updateViewAndGraph() {
+void WindowManager::updateView() {
     if(openedGraph) {
         // setView("qrc:/file_loaded_placeholder.qml");
         setView("qrc:/graphview.qml");
-        graph = qobject_cast<KnowledgeGraph*>(engine.rootObjects().first()->findChild<QQuickItem*>("graph"));
     }
     else {
         setView("qrc:/no_file.qml");
+    }
+}
+
+void WindowManager::updateGraph() {
+    if(openedGraph) {
+        graph = qobject_cast<KnowledgeGraph*>(engine.rootObjects().first()->findChild<QQuickItem*>("graph"));
+        if (graph) {
+            connect(graph, &KnowledgeGraph::customElementInserted, this, &changesMade);
+            connect(graph, &KnowledgeGraph::nodeRemoved, this, &changesMade);
+            connect(graph, &KnowledgeGraph::onEdgeRemoved, this, &changesMade);
+            connect(graph, &KnowledgeGraph::nodeMoved, this, &changesMade);
+            connect(graph, &KnowledgeGraph::nodeResized, this, &changesMade);
+            connect(graph, &KnowledgeGraph::elementChanged, this, &changesMade);
+        }
+    }
+    else {
         graph = nullptr;
     }
 }
@@ -140,10 +159,12 @@ void WindowManager::openFile() {
         openedFile = true;
         openedFileName = QString::fromStdString(fileName);
         openedGraph = true;
-        updateWindowTitle();
-        updateViewAndGraph();
+        updateView();
+        updateGraph();
         graph->loadFile(file);
         file.close();
+        unsavedChanges = false;
+        updateWindowTitle();
     )
 }
 
@@ -154,10 +175,11 @@ void WindowManager::newFile() {
         openedGraph = true;
         unsavedChanges = false;
         
-        // TODO
-        
         updateWindowTitle();
-        updateViewAndGraph();
+        updateView();
+        updateGraph();
+
+        graph->clearGraph();
     )
 }
 
@@ -206,11 +228,17 @@ void WindowManager::closeFile() {
         openedGraph = false;
         unsavedChanges = false;
         updateWindowTitle();
-        updateViewAndGraph();
+        updateView();
+        updateGraph();
     )
 }
 
 bool WindowManager::checkClose() {
     SAVE_PROMPT_GUARD(return true;)
     return false;
+}
+
+void WindowManager::changesMade() {
+    unsavedChanges = true;
+    updateWindowTitle();
 }
