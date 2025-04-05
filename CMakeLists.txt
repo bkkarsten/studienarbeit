@@ -30,6 +30,7 @@ set(SOURCES
     src/EdgeBase.cpp
     src/KnowledgeGraph.cpp
     src/KeyboardHelper.cpp
+    src/SM2.cpp
 )
 
 add_executable(studar ${SOURCES})

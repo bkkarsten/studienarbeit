@@ -15,10 +15,9 @@ class ConceptNode;
  */
 class Question {
 private:
-    float proficiency;
     float customWeight = 1.0;
+    boost::json::object fcMetadata;
     QDateTime lastAnswered;
-    QDateTime lastCorrectlyAnswered;
     QDateTime lastChanged;
 
     Content content; 
@@ -35,14 +34,12 @@ protected:
 public:
     Question() {};
     const QDateTime& getLastAnswered() const { return lastAnswered; }
-    const QDateTime& getLastCorrectlyAnswered() const { return lastCorrectlyAnswered; }
     const QDateTime& getLastChanged() const { return lastChanged; }
-    float getProficiency() const { return proficiency; }
     float getCustomWeight() const { return customWeight; }
     void setCustomWeight(float customWeight);
+    boost::json::object& getFlashcardMetadata() { return fcMetadata; }
     
     void answered() { lastAnswered = QDateTime::currentDateTime(); }
-    void correctlyAnswered() { lastCorrectlyAnswered = QDateTime::currentDateTime(); }
     void changed();
     /**
      * @brief Displays the question. TODO!
