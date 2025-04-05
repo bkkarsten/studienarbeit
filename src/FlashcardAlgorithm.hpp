@@ -8,6 +8,7 @@
 /**
  * @brief An interface for flashcard algorithms. They are responsible for deciding when
  * a question is due. Note that they do not directly select the questions to be reviewed.
+ * It is recommended that the algorithms remain stateless.
  */
 class FlashcardAlgorithm {
 public:
@@ -29,6 +30,12 @@ public:
      * corresponding buttons in the GUI.
      */
     virtual QStringList answerQualityColours() { return QStringList(); }
+    /**
+     * @brief Should set all unset values in the question's flashcard metadata to default values.
+     * Other checks and logic which are necessary before the question is used by the algorithm 
+     * can also be performed.
+     */
+    virtual void initialise(Question*) = 0;
     /**
      * @brief Should apply default values to the question's flashcard metadata
      */
