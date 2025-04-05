@@ -28,7 +28,7 @@ QStringList SM2::answerQualityColours() {
 void SM2::reset(Question* question) {
     boost::json::object& meta = question->getFlashcardMetadata();
     meta["sm2_n"] = 0u;
-    meta["sm2_interval"] = 0.0;
+    meta["sm2_interval"] = 0u;
     meta["sm2_easiness"] = 2.5;
     meta["sm2_duedate"] = QDate::currentDate().toString().toStdString();
 }
@@ -39,7 +39,7 @@ void SM2::initialise(Question* question) {
         meta["sm2_n"] = 0u;
     }
     if(!meta.contains("sm2_interval")) {
-        meta["sm2_interval"] = 0.0;
+        meta["sm2_interval"] = 0u;
     }
     if(!meta.contains("sm2_duedate")) {
         meta["sm2_duedate"] = QDate::currentDate().toString().toStdString();
@@ -83,21 +83,21 @@ bool SM2::answered(Question* question, unsigned int quality) {
     boost::json::object& meta = question->getFlashcardMetadata();
     uint64_t& n = meta["sm2_n"].as_uint64();
     double& easiness = meta["sm2_easiness"].as_double();
-    double& interval = meta["sm2_interval"].as_double();
+    uint64_t& interval = meta["sm2_interval"].as_uint64();
     if(quality < 3) {
         n = 0u;
-        interval = 0.0;
+        interval = 0u;
     }
     else if(quality >= 4) {    
         n++;
         easiness = std::clamp(easiness + (w0 + w1 * quality + w2 * quality * quality), 
             ef_min, ef_max);
-        interval = (
+        interval = uint64_t(std::ceil((
             n == 1 ? i1 : (
             n == 2 ? i2 :
-            std::ceil(interval * easiness)
-        ));
-        QDate newDuedate = QDate::currentDate().addDays(qint64(interval));
+            interval * easiness
+        )) / question->getCustomWeight()));
+        QDate newDuedate = QDate::currentDate().addDays(interval);
         meta["sm2_duedate"] = newDuedate.toString().toStdString();
     }
     return quality < 4; // review again if answer quality below four
