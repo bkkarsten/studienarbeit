@@ -39,6 +39,12 @@ ApplicationWindow {
         }
         Menu {
             title: "Review"
+            Action {
+                text: "Classic"
+            }
+            Action {
+                text: "Graph based"
+            }
         }
     }
 
