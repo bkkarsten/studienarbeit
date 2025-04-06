@@ -15,6 +15,11 @@ class KnowledgeGraph;
  */
 class WindowManager : public QObject {
     Q_OBJECT
+
+    enum View {
+        NONE, GRAPH, REVIEW
+    };
+
 private:
     // QML engine
     QQmlApplicationEngine engine;
@@ -38,15 +43,17 @@ private:
     bool openedGraph = false;
     // Whether there are any unsaved changes
     bool unsavedChanges = false;
+    // What is currently displayed in the window
+    View currentView = NONE;
     /**
      * @brief Sets the window's core QML content.
      * @param source The qml file to load
      */
-    void setView(QString source);
-    /** 
-     * @brief Updates the window's core QML content based on whether a graph is opened and which.
+    void setViewSource(QString source);
+    /**
+     * @brief Sets the window's core QML content.
      */
-    void updateView();
+    void setView(View view);
     /**
      * @brief Updates the window's title based on the opened file.
      * @return The new window title.
