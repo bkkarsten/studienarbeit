@@ -15,5 +15,7 @@
         <file>DraggableRect.qml</file>
         <file>ConnectorEdge.qml</file>
         <file>ExponentialSlider.qml</file>
+        <file>review_session.qml</file>
+        <file>Switcher.qml</file>
     </qresource>
 </RCC>
