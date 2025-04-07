@@ -94,7 +94,7 @@ void WindowManager::setView(View view) {
             setViewSource("qrc:/no_file.qml");
             break;
         case View::REVIEW:
-            setViewSource("qrc:/reviewview.qml");
+            setViewSource("qrc:/review_session.qml");
             break;
         default:
             showError("Unknown view type.");
@@ -143,6 +143,13 @@ void WindowManager::showWarning(QString message) {
     errorMessage.exec();
 }
 
+void WindowManager::showInfo(QString message) {
+    errorMessage.setIcon(QMessageBox::Information);
+    errorMessage.setWindowTitle(tr("Info"));
+    errorMessage.setText(message);
+    errorMessage.exec();
+}
+
 void WindowManager::registerChanges() {
     unsavedChanges = true;
     updateWindowTitle();
@@ -161,8 +168,7 @@ void WindowManager::openFile() {
         }
         openedFile = true;
         openedFileName = QString::fromStdString(fileName);
-        openedGraph = true;
-        updateView();
+        setView(View::GRAPH);
         updateGraph();
         graph->loadFile(file);
         file.close();
@@ -242,4 +248,13 @@ bool WindowManager::checkClose() {
 void WindowManager::changesMade() {
     unsavedChanges = true;
     updateWindowTitle();
+}
+
+void WindowManager::startReview() {
+    if(currentView == View::GRAPH) {
+        setView(View::REVIEW);
+    }
+    else {
+        showInfo(tr("You must open a graph before starting a review session."));
+    }
 }

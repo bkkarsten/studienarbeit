@@ -39,8 +39,6 @@ private:
     bool openedFile;
     // The name of the file which has been opened
     QString openedFileName;
-    // Whether a graph is currently opened
-    bool openedGraph = false;
     // Whether there are any unsaved changes
     bool unsavedChanges = false;
     // What is currently displayed in the window
@@ -71,6 +69,10 @@ private:
      * @brief Shows a warning message box with the given message.
      */
     void showWarning(QString message);
+    /**
+     * @brief Shows an info message box with the given message.
+     */
+    void showInfo(QString message);
     /**
      * @brief Saves the graph to openedFile.
      */
@@ -123,6 +125,10 @@ public:
      * Called when closing the window.
      */
     Q_INVOKABLE bool checkClose();
+    /**
+     * @brief This will open the review view.
+     */
+    Q_INVOKABLE void startReview();
 
 public slots:
     void changesMade();
