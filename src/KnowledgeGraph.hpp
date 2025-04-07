@@ -2,6 +2,7 @@
 #define KNOWLEDGEGRAPH_H
 
 #include <QuickQanava>
+#include <QSet>
 
 #include "ConceptNode.hpp"
 #include "QuestionEdge.hpp"
@@ -33,6 +34,8 @@ public:
      * @brief Checks whether all nodes and edges are valid.
      */
     bool valid();
+
+    QSet<Question*> allQuestions();
 
     /**
      * @brief Saves the graph to a file in json format.
