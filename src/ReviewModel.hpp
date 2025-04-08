@@ -1,7 +1,7 @@
 #ifndef REVIEWMODEL_H
 #define REVIEWMODEL_H
 
-#include "Question.hpp"
+#include "AskedQuestion.hpp"
 #include "KnowledgeGraph.hpp"
 #include "FlashcardAlgorithm.hpp"
 
@@ -28,7 +28,7 @@ public:
     /**
      * @brief Get the next question to be asked.
      */
-    virtual Question* nextQuestion() = 0;
+    virtual AskedQuestion nextQuestion() = 0;
     /**
      * @brief Give an answer to the current question. This should call the algorithm's answered function.
      */

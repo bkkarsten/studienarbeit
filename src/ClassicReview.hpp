@@ -12,16 +12,21 @@ class ClassicReview : public ReviewModel {
 
 private:
 
-    Question* currentQuestion;
-    QList<Question*> openQuestions;
-    QList<Question*> againQuestions;
+    bool bidirectional;
+    AskedQuestion currentQuestion;
+    QList<AskedQuestion> openQuestions;
+    QList<AskedQuestion> againQuestions;
 
 public:
 
-    ClassicReview(const FlashcardAlgorithm& algorithm) : ReviewModel(algorithm) {}
+    /**
+     * @param algorithm The algorithm that decides which questions are due
+     * @param bidirectional Whether the questions should be asked in both directions
+     */
+    ClassicReview(const FlashcardAlgorithm& algorithm, bool bidirectional=false);
 
     bool initialise(const KnowledgeGraph&) override;
-    Question* nextQuestion() override;
+    AskedQuestion nextQuestion() override;
     void answerQuestion(unsigned int) override;
 
 };

@@ -16,5 +16,7 @@ struct AskedQuestion {
     Direction direction;
 };
 
+constexpr AskedQuestion NO_QUESTION = {nullptr, Direction::FORWARD};
+
 
 #endif

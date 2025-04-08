@@ -2,35 +2,42 @@
 
 #include <cstdlib>
 
+ClassicReview::ClassicReview(const FlashcardAlgorithm& algorithm, bool bidirectional) 
+    : ReviewModel(algorithm) 
+    , bidirectional(bidirectional)
+{}
+
 bool ClassicReview::initialise(const KnowledgeGraph& graph) {
-    openQuestions = graph.allQuestions().values();
-    openQuestions.removeIf([&](Question* q) {
-        return !fcAlgo.due(q);
-    });
+    QSet<Question*> allQuestions = graph.allQuestions();
+    for(Question* question : allQuestions) {
+        openQuestions.append({question, Direction(
+            bidirectional ? rand() % 2 : Direction::FORWARD
+        )});
+    }
     return !openQuestions.isEmpty();
 }
 
-Question* ClassicReview::nextQuestion() {
+AskedQuestion ClassicReview::nextQuestion() {
     if(openQuestions.isEmpty()) {
         if(againQuestions.isEmpty()) {
-            return nullptr;
+            return NO_QUESTION;
         }
         openQuestions = againQuestions;
         againQuestions.clear();
     }
     int randomIndex = rand() % openQuestions.size();
-    Question* next = openQuestions.takeAt(randomIndex);
+    AskedQuestion next = openQuestions.takeAt(randomIndex);
     currentQuestion = next;
     return next;
 }
 
 void ClassicReview::answerQuestion(unsigned int quality) {
-    if(currentQuestion == nullptr) {
+    if(currentQuestion.question == nullptr) {
         return;
     }
-    bool again = fcAlgo.answered(currentQuestion, quality);
+    bool again = fcAlgo.answered(currentQuestion.question, quality);
     if(again) {
         againQuestions.append(currentQuestion);
     }
-    currentQuestion = nullptr;
+    currentQuestion = NO_QUESTION;
 }
