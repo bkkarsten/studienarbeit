@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 
 Item {
     id: reviewUI
+    objectName: "reviewUI"
     property int numButtons: 6
     property var buttonTexts: ["First", "Second", "Third", "Fourth", "Fifth", "Sixth"]
     property var buttonColours: ["black", "red", "orange", "yellow", "green", "blue"]
@@ -93,7 +94,7 @@ Item {
 
                 Canvas {
                     width: parent.width
-                    height: 50
+                    height: 30
                     
                     onPaint: {
                         var ctx = getContext("2d");
@@ -109,6 +110,7 @@ Item {
                 }
 
                 Content {
+                    objectName: "questionContent"
                     width: parent.width * 0.7
                     anchors.horizontalCenter: parent.horizontalCenter
                     Component.onCompleted: addTextElement("Komplexität")
@@ -126,6 +128,7 @@ Item {
                         width: parent.width
                         spacing: 10
                         Repeater {
+                            objectName: "answerContents"
                             model: numAnswers
                             Content {
                                 width: parent.width
@@ -180,7 +183,7 @@ Item {
                     }
 
                     onClicked: {
-                        revealed = false;
+                        manager.answerQuestion(index);
                     }
                 }
             }
