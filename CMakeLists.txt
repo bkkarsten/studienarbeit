@@ -31,6 +31,7 @@ set(SOURCES
     src/KnowledgeGraph.cpp
     src/KeyboardHelper.cpp
     src/SM2.cpp
+    src/ClassicReview.cpp
 )
 
 add_executable(studar ${SOURCES})
