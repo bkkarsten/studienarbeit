@@ -258,3 +258,9 @@ void WindowManager::startReview() {
         showInfo(tr("You must open a graph before starting a review session."));
     }
 }
+
+void WindowManager::exitReview() {
+    if(currentView == View::REVIEW){
+        setView(View::GRAPH);
+    }
+}

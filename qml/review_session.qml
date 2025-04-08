@@ -15,19 +15,30 @@ Item {
 
     anchors.fill: parent
 
+    Button {
+        id: exitButton
+        text: "Exit"
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.margins: 10
+        onClicked: {
+            manager.exitReview();
+        }
+    }
+
     Column {
         anchors.fill: parent
         spacing: 20
 
         Rectangle {
             width: parent.width
-            height: 20
+            height: 40
             color: "transparent"
         }
 
         Row {
             width: parent.width - 50
-            height: parent.height - 100
+            height: parent.height - 140
             anchors.horizontalCenter: parent.horizontalCenter
 
             Switcher {

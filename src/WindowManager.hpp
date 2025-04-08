@@ -129,6 +129,10 @@ public:
      * @brief This will open the review view.
      */
     Q_INVOKABLE void startReview();
+    /**
+     * * @brief This will return from the review screen to the graph view.
+     */
+    Q_INVOKABLE void exitReview();
 
 public slots:
     void changesMade();
