@@ -5,6 +5,8 @@
 #include "KnowledgeGraph.hpp"
 #include "FlashcardAlgorithm.hpp"
 
+#include <memory>
+
 /**
  * @brief Interface for how questions will be selected from the knowledge graph
  */
@@ -12,12 +14,15 @@ class ReviewModel {
 
 protected:
 
-    const FlashcardAlgorithm& fcAlgo;
+    std::unique_ptr<FlashcardAlgorithm> fcAlgo;
 
-    ReviewModel(const FlashcardAlgorithm& algorithm) : fcAlgo(algorithm) {} 
+    ReviewModel(std::unique_ptr<FlashcardAlgorithm> algorithm)
+        : fcAlgo(std::move(algorithm)) {}
     ReviewModel() = delete;
 
 public:
+
+    FlashcardAlgorithm* getFlashcardAlgorithm() const { return fcAlgo.get(); }
 
     /**
      * @brief Initialise the review model. For example, collect the due questions and decide the order.

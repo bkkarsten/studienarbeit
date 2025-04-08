@@ -23,7 +23,7 @@ public:
      * @param algorithm The algorithm that decides which questions are due
      * @param bidirectional Whether the questions should be asked in both directions
      */
-    ClassicReview(const FlashcardAlgorithm& algorithm, bool bidirectional=false);
+    ClassicReview(std::unique_ptr<FlashcardAlgorithm> algorithm, bool bidirectional=false);
 
     bool initialise(const KnowledgeGraph&) override;
     AskedQuestion nextQuestion() override;

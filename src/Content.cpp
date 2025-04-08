@@ -3,7 +3,7 @@
 #include <QRegularExpression>
 #include <QMetaObject>
 
-QPair<QStringList, QStringList> Content::separate(const QString& string) {
+QPair<QStringList, QStringList> Content::separate(const QString& string) const {
     QStringList elements;
     QStringList types;
     QRegularExpression imgRegex(QString(IMAGE_CMD).append(R"(\([^()]+\.[^()]+\))"));
@@ -45,7 +45,7 @@ QPair<QStringList, QStringList> Content::separate(const QString& string) {
 }
 
 
-void Content::apply(QQuickItem* contentItem)
+void Content::apply(QQuickItem* contentItem) const 
 {
     QPair<QStringList, QStringList> separation = separate(textForm);
     if(!contentItem) {

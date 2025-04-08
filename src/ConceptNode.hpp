@@ -25,6 +25,7 @@ signals:
 public: 
     ConceptNode(QObject* parent = nullptr);
 
+    const Content& getContent() const { return content; }
     const QString& getContentTextForm() const { return content.getTextForm(); }
     void setContentTextForm(const QString& textForm);
 

@@ -2,6 +2,8 @@
 #include "config.hpp"
 
 #include "KnowledgeGraph.hpp"
+#include "ClassicReview.hpp"
+#include "SM2.hpp"
 
 #include <QQmlProperty>
 #include <QQmlContext>
@@ -88,13 +90,15 @@ void WindowManager::setView(View view) {
     currentView = view;
     switch(currentView) {
         case View::GRAPH:
-            setViewSource("qrc:/graphview.qml");
+            setViewSource("qrc:/graph_or_review.qml");
+            QQmlProperty::write(qmlWindow->findChild<QQuickItem*>("graphOrReview"), "show", 0);
             break;
         case View::NONE:
             setViewSource("qrc:/no_file.qml");
             break;
         case View::REVIEW:
-            setViewSource("qrc:/review_session.qml");
+        setViewSource("qrc:/graph_or_review.qml");
+        QQmlProperty::write(qmlWindow->findChild<QQuickItem*>("graphOrReview"), "show", 1);
             break;
         default:
             showError("Unknown view type.");
@@ -253,6 +257,19 @@ void WindowManager::changesMade() {
 void WindowManager::startReview() {
     if(currentView == View::GRAPH) {
         setView(View::REVIEW);
+        reviewSession = new ReviewSession(
+            std::make_unique<ClassicReview>(
+                std::make_unique<SM2>()
+            ),
+            *graph,
+            qmlWindow->findChild<QQuickItem*>("reviewUI")
+        );
+        connect(reviewSession, &ReviewSession::finished, this, &WindowManager::exitReview);
+        bool anyQuestions = reviewSession->start();
+        if(!anyQuestions) {
+            setView(View::GRAPH);
+            showInfo(tr("There is nothing to review."));
+        }
     }
     else {
         showInfo(tr("You must open a graph before starting a review session."));
@@ -261,6 +278,14 @@ void WindowManager::startReview() {
 
 void WindowManager::exitReview() {
     if(currentView == View::REVIEW){
+        delete reviewSession;
+        reviewSession = nullptr;
         setView(View::GRAPH);
+    }
+}
+
+void WindowManager::answerQuestion(unsigned int quality) {
+    if(reviewSession != nullptr) {
+        reviewSession->answerQuestion(quality);
     }
 }

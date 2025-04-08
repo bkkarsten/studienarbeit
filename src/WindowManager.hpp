@@ -8,6 +8,8 @@
 #include <QMessageBox>
 #include <QQuickWindow>
 
+#include "ReviewSession.hpp"
+
 class KnowledgeGraph;
 
 /**
@@ -43,6 +45,8 @@ private:
     bool unsavedChanges = false;
     // What is currently displayed in the window
     View currentView = NONE;
+    // The review session object
+    ReviewSession* reviewSession;
     /**
      * @brief Sets the window's core QML content.
      * @param source The qml file to load
@@ -133,6 +137,10 @@ public:
      * * @brief This will return from the review screen to the graph view.
      */
     Q_INVOKABLE void exitReview();
+    /**
+     * @brief This will answer the current question with the given quality.
+     */
+    Q_INVOKABLE void answerQuestion(unsigned int quality);
 
 public slots:
     void changesMade();

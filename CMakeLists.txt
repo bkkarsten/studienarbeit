@@ -32,6 +32,7 @@ set(SOURCES
     src/KeyboardHelper.cpp
     src/SM2.cpp
     src/ClassicReview.cpp
+    src/ReviewSession.cpp
 )
 
 add_executable(studar ${SOURCES})

@@ -2,8 +2,8 @@
 
 #include <cstdlib>
 
-ClassicReview::ClassicReview(const FlashcardAlgorithm& algorithm, bool bidirectional) 
-    : ReviewModel(algorithm) 
+ClassicReview::ClassicReview(std::unique_ptr<FlashcardAlgorithm> algorithm, bool bidirectional) 
+    : ReviewModel(std::move(algorithm)) 
     , bidirectional(bidirectional)
 {}
 
@@ -35,7 +35,7 @@ void ClassicReview::answerQuestion(unsigned int quality) {
     if(currentQuestion.question == nullptr) {
         return;
     }
-    bool again = fcAlgo.answered(currentQuestion.question, quality);
+    bool again = fcAlgo->answered(currentQuestion.question, quality);
     if(again) {
         againQuestions.append(currentQuestion);
     }

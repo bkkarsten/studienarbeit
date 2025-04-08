@@ -9,15 +9,19 @@ Rectangle {
     height: contentColumn.height + marginTop + marginBottom
 
     Column {
-        id: contentColumn
-        objectName: "contentColumn"
-        width: parent.width
+        anchors.fill: parent
         Rectangle {
             width: parent.width
             height: marginTop
             color: "transparent"
         }
+        Column {
+            id: contentColumn
+            objectName: "contentColumn"
+            width: parent.width
+        }
     }
+    
 
     // Add a text element to the column.
     function addTextElement(text) {
