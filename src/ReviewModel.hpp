@@ -10,14 +10,20 @@
  */
 class ReviewModel {
 
+protected:
+
+    const FlashcardAlgorithm& fcAlgo;
+
+    ReviewModel(const FlashcardAlgorithm& algorithm) : fcAlgo(algorithm) {} 
+    ReviewModel() = delete;
+
 public:
 
     /**
      * @brief Initialise the review model. For example, collect the due questions and decide the order.
      * @param graph The knowledge graph to take the questions from
-     * @param algorithm The flashacrd algorithm that decides when a question is due
      */
-    virtual void initialise(const KnowledgeGraph& graph, const FlashcardAlgorithm& algorithm) = 0;
+    virtual void initialise(const KnowledgeGraph& graph) = 0;
     /**
      * @brief Get the next question to be asked.
      */
