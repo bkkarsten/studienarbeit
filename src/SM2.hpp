@@ -27,23 +27,23 @@ private:
 
 public:
 
-    QString displayName() override { return "SM-2"; }
+    QString displayName() const override { return "SM-2"; }
 
-    unsigned int numAnswerQualities() override { return 6; }
+    unsigned int numAnswerQualities() const override { return 6; }
 
-    QStringList answerQualityNames() override;
+    QStringList answerQualityNames() const override;
 
-    QStringList answerQualityColours() override;
+    QStringList answerQualityColours() const override;
 
-    void initialise(Question*) override;
+    void initialise(Question*) const override;
 
-    void reset(Question*) override;
+    void reset(Question*) const override;
 
-    bool due(Question*) override;
+    bool due(Question*) const override;
 
-    float weight(Question*) override;
+    float weight(Question*) const override;
 
-    virtual bool answered(Question*, unsigned int) override;
+    virtual bool answered(Question*, unsigned int) const override;
 };
 
 

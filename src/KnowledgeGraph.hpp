@@ -35,7 +35,7 @@ public:
      */
     bool valid();
 
-    QSet<Question*> allQuestions();
+    QSet<Question*> allQuestions() const;
 
     /**
      * @brief Saves the graph to a file in json format.
