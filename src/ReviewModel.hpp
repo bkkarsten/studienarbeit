@@ -22,8 +22,9 @@ public:
     /**
      * @brief Initialise the review model. For example, collect the due questions and decide the order.
      * @param graph The knowledge graph to take the questions from
+     * @return Whether there is anything to review.
      */
-    virtual void initialise(const KnowledgeGraph& graph) = 0;
+    virtual bool initialise(const KnowledgeGraph& graph) = 0;
     /**
      * @brief Get the next question to be asked.
      */

@@ -20,7 +20,7 @@ public:
 
     ClassicReview(const FlashcardAlgorithm& algorithm) : ReviewModel(algorithm) {}
 
-    void initialise(const KnowledgeGraph&) override;
+    bool initialise(const KnowledgeGraph&) override;
     Question* nextQuestion() override;
     void answerQuestion(unsigned int) override;
 

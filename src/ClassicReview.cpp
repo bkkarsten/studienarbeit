@@ -2,11 +2,12 @@
 
 #include <cstdlib>
 
-void ClassicReview::initialise(const KnowledgeGraph& graph) {
+bool ClassicReview::initialise(const KnowledgeGraph& graph) {
     openQuestions = graph.allQuestions().values();
     openQuestions.removeIf([&](Question* q) {
         return !fcAlgo.due(q);
     });
+    return !openQuestions.isEmpty();
 }
 
 Question* ClassicReview::nextQuestion() {
