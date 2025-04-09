@@ -16,6 +16,7 @@ ReviewSession::ReviewSession(std::unique_ptr<ReviewModel> model, const Knowledge
 
     FlashcardAlgorithm* fcAlgo = reviewModel->getFlashcardAlgorithm();
     if(fcAlgo) {
+        answersWithQuality.fill(0, fcAlgo->numAnswerQualities());
         QQmlProperty::write(reviewView, "buttonTexts", fcAlgo->answerQualityNames());
         QQmlProperty::write(reviewView, "buttonColours", fcAlgo->answerQualityColours());
         QQmlProperty::write(reviewView, "numButtons", fcAlgo->numAnswerQualities());
@@ -65,6 +66,7 @@ void ReviewSession::showQuestion(AskedQuestion askedQuestion) {
 }
 
 void ReviewSession::answerQuestion(unsigned int quality) {
+    answersWithQuality[quality]++;
     reviewModel->answerQuestion(quality);
     AskedQuestion next = reviewModel->nextQuestion();
     currentQuestion++;
@@ -83,4 +85,16 @@ bool ReviewSession::start() {
         showQuestion(reviewModel->nextQuestion()); // display the first question
     }
     return anyQuestions;
+}
+
+void ReviewSession::showResults(QQuickItem* resultScreen) {
+    unsigned score = 0;
+    unsigned total = 0;
+    for(unsigned q = 0; q < answersWithQuality.size(); q++) {
+        score += answersWithQuality[q] * q;
+        total += answersWithQuality[q] * (answersWithQuality.size() - 1);
+    }
+    QQmlProperty::write(resultScreen, "reachedScore", score);
+    QQmlProperty::write(resultScreen, "totalScore", total);
+    QQmlProperty::write(resultScreen, "numAnswers", QVariant::fromValue(answersWithQuality));
 }

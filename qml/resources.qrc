@@ -18,5 +18,6 @@
         <file>ReviewSession.qml</file>
         <file>Switcher.qml</file>
         <file>graph_or_review.qml</file>
+        <file>ResultScreen.qml</file>
     </qresource>
 </RCC>

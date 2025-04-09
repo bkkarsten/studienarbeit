@@ -97,8 +97,12 @@ void WindowManager::setView(View view) {
             setViewSource("qrc:/no_file.qml");
             break;
         case View::REVIEW:
-        setViewSource("qrc:/graph_or_review.qml");
-        QQmlProperty::write(qmlWindow->findChild<QQuickItem*>("graphOrReview"), "show", 1);
+            setViewSource("qrc:/graph_or_review.qml");
+            QQmlProperty::write(qmlWindow->findChild<QQuickItem*>("graphOrReview"), "show", 1);
+            break;
+        case View::RESULTS:
+            setViewSource("qrc:/graph_or_review.qml");
+            QQmlProperty::write(qmlWindow->findChild<QQuickItem*>("graphOrReview"), "show", 2);
             break;
         default:
             showError("Unknown view type.");
@@ -264,7 +268,10 @@ void WindowManager::startReview() {
             *graph,
             qmlWindow->findChild<QQuickItem*>("reviewUI")
         );
-        connect(reviewSession, &ReviewSession::finished, this, &WindowManager::exitReview);
+        connect(reviewSession, &ReviewSession::finished, this, [&](){
+            setView(View::RESULTS);
+            reviewSession->showResults(qmlWindow->findChild<QQuickItem*>("resultScreen"));
+        });
         bool anyQuestions = reviewSession->start();
         if(!anyQuestions) {
             setView(View::GRAPH);
@@ -277,7 +284,7 @@ void WindowManager::startReview() {
 }
 
 void WindowManager::exitReview() {
-    if(currentView == View::REVIEW){
+    if(currentView == View::REVIEW || currentView == View::RESULTS){
         delete reviewSession;
         reviewSession = nullptr;
         setView(View::GRAPH);

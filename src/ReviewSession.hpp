@@ -2,6 +2,7 @@
 #define REVIEWSESSION_H
 
 #include <QQuickItem>
+#include <QVector>
 
 #include "AskedQuestion.hpp"
 #include "FlashcardAlgorithm.hpp"
@@ -17,6 +18,7 @@ class ReviewSession : public QObject {
 private:
 
     int currentQuestion;
+    QVector<unsigned> answersWithQuality;
 
     QQuickItem* reviewView;
     QQuickItem* contextContents; // Repeater
@@ -45,6 +47,8 @@ public:
      * @brief Passes the quality of the answer to the review model and displays the nest question.
      */
     void answerQuestion(unsigned int quality);
+
+    void showResults(QQuickItem* resultScreen);
 
 signals:
     void finished();

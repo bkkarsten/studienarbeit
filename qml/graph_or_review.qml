@@ -9,4 +9,6 @@ Switcher {
     Graphview {}
 
     ReviewSession {}
+
+    ResultScreen {}
 }

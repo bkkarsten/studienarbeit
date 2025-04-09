@@ -19,7 +19,7 @@ class WindowManager : public QObject {
     Q_OBJECT
 
     enum View {
-        NONE, GRAPH, REVIEW
+        NONE, GRAPH, REVIEW, RESULTS
     };
 
 private:
