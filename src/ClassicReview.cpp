@@ -10,9 +10,11 @@ ClassicReview::ClassicReview(std::unique_ptr<FlashcardAlgorithm> algorithm, bool
 bool ClassicReview::initialise(const KnowledgeGraph& graph) {
     QSet<Question*> allQuestions = graph.allQuestions();
     for(Question* question : allQuestions) {
-        openQuestions.append({question, Direction(
-            bidirectional ? rand() % 2 : Direction::FORWARD
-        )});
+        if(fcAlgo->due(question)) {
+            openQuestions.append({question, Direction(
+                bidirectional ? rand() % 2 : Direction::FORWARD
+            )});
+        }
     }
     return !openQuestions.isEmpty();
 }
