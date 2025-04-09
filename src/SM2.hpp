@@ -18,8 +18,8 @@ private:
     static constexpr double w1 = 0.28;
     static constexpr double w2 = -0.02;
 // interval sizes for new items
-    static constexpr uint64_t i1 = 1U;
-    static constexpr uint64_t i2 = 6U;
+    static constexpr int64_t i1 = 1;
+    static constexpr int64_t i2 = 6;
 // interval for easiness factor
     static constexpr double ef_min = 1.3;
     static constexpr double ef_max = 2.5;
