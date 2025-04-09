@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtMultimedia
 
 Item {
     id: resultScreen
@@ -57,6 +58,17 @@ Item {
                 onEntered: hoverText.visible = true
                 onExited: hoverText.visible = false
             }
+        }
+    }
+
+    SoundEffect {
+        id: fanfare
+        source: "qrc:/sounds/fanfare.wav"
+    }
+
+    onVisibleChanged: {
+        if(visible) {
+            fanfare.play();
         }
     }
 }

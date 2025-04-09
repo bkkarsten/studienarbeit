@@ -14,7 +14,10 @@ set(BOOST_LIBRARYDIR "${BOOST_ROOT}/stage/lib")
 
 find_package(Boost 1.87 REQUIRED)  
 
-qt_add_resources(QRC_FILES qml/resources.qrc)
+qt6_add_resources(QRC_FILES 
+    qml/resources.qrc
+    sounds/sound_resources.qrc
+)
 
 set(SOURCES
     main.cpp
