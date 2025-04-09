@@ -2,6 +2,7 @@
 
 #include <QDate>
 #include <algorithm>
+#include <cmath>
 
 QStringList SM2::answerQualityNames() const {
     return {
@@ -66,7 +67,7 @@ float SM2::weight(Question* question) const {
     QDate duedate = QDate::fromString(QString::fromStdString(std::string(meta["sm2_duedate"].as_string())));
     if(!duedate.isValid()) {
         qWarning() << "Invalid duedate encountered in SM2 algorithm!";
-        return false;
+        return NAN;
     }
     int daysLeft = QDate::currentDate().daysTo(duedate);
     if(daysLeft < 0) {
