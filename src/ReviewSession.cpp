@@ -15,9 +15,9 @@ ReviewSession::ReviewSession(std::unique_ptr<ReviewModel> model, const Knowledge
 
     FlashcardAlgorithm* fcAlgo = reviewModel->getFlashcardAlgorithm();
     if(fcAlgo) {
-        QQmlProperty::write(reviewView, "numButtons", fcAlgo->numAnswerQualities());
         QQmlProperty::write(reviewView, "buttonTexts", fcAlgo->answerQualityNames());
         QQmlProperty::write(reviewView, "buttonColours", fcAlgo->answerQualityColours());
+        QQmlProperty::write(reviewView, "numButtons", fcAlgo->numAnswerQualities());
     }
     else {
         qWarning() << "ReviewSession's ReviewModel does not have a flashcard algorithm!";

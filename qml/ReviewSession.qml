@@ -4,12 +4,12 @@ import QtQuick.Controls 2.15
 Item {
     id: reviewUI
     objectName: "reviewUI"
-    property int numButtons: 6
-    property var buttonTexts: ["First", "Second", "Third", "Fourth", "Fifth", "Sixth"]
-    property var buttonColours: ["black", "red", "orange", "yellow", "green", "blue"]
+    property int numButtons: 0
+    property var buttonTexts: []
+    property var buttonColours: []
 
-    property int numContexts: 2
-    property int numAnswers: 1
+    property int numContexts: 0
+    property int numAnswers: 0
 
     property bool revealed: false
     property bool reverse: false
@@ -62,10 +62,6 @@ Item {
                                 marginBottom: 6
                                 border.width: 2
                             }
-                            Component.onCompleted: {
-                                itemAt(0).addTextElement("QuickSort");
-                                itemAt(1).addTextElement("MergeSort");
-                            }
                             
                         }
                     }
@@ -113,7 +109,6 @@ Item {
                     objectName: "questionContent"
                     width: parent.width * 0.7
                     anchors.horizontalCenter: parent.horizontalCenter
-                    Component.onCompleted: addTextElement("Komplexität")
                 }
             }
 
@@ -136,7 +131,6 @@ Item {
                                 marginBottom: 6
                                 border.width: 2
                             }
-                            Component.onCompleted: itemAt(0).addTextElement("O(nlogn)")
                         }
                     }
                 }
