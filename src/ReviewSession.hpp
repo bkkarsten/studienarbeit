@@ -16,6 +16,8 @@ class ReviewSession : public QObject {
 
 private:
 
+    int currentQuestion;
+
     QQuickItem* reviewView;
     QQuickItem* contextContents; // Repeater
     QQuickItem* questionContent; // Content

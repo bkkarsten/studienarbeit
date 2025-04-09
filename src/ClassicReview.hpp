@@ -13,6 +13,7 @@ class ClassicReview : public ReviewModel {
 private:
 
     bool bidirectional;
+    int numQ;
     AskedQuestion currentQuestion;
     QList<AskedQuestion> openQuestions;
     QList<AskedQuestion> againQuestions;
@@ -28,6 +29,7 @@ public:
     bool initialise(const KnowledgeGraph&) override;
     AskedQuestion nextQuestion() override;
     void answerQuestion(unsigned int) override;
+    int numQuestions() override;
 
 };
 

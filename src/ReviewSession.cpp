@@ -9,6 +9,7 @@ ReviewSession::ReviewSession(std::unique_ptr<ReviewModel> model, const Knowledge
         qWarning() << "ReviewView is null!";
         return;
     }
+
     contextContents = reviewView->findChild<QQuickItem*>("contextContents");
     questionContent = reviewView->findChild<QQuickItem*>("questionContent");
     answerContents = reviewView->findChild<QQuickItem*>("answerContents");
@@ -25,6 +26,9 @@ ReviewSession::ReviewSession(std::unique_ptr<ReviewModel> model, const Knowledge
 }
 
 void ReviewSession::showQuestion(AskedQuestion askedQuestion) {
+    QQmlProperty::write(reviewView, "totalQuestions", reviewModel->numQuestions());
+    QQmlProperty::write(reviewView, "currentQuestion", currentQuestion);
+
     QQmlProperty::write(reviewView, "reversed", askedQuestion.direction);
     QQmlProperty::write(reviewView, "revealed", false);
     Question* q = askedQuestion.question;
@@ -63,6 +67,7 @@ void ReviewSession::showQuestion(AskedQuestion askedQuestion) {
 void ReviewSession::answerQuestion(unsigned int quality) {
     reviewModel->answerQuestion(quality);
     AskedQuestion next = reviewModel->nextQuestion();
+    currentQuestion++;
     if(next.question == nullptr) {
         emit finished();
     }
@@ -72,6 +77,7 @@ void ReviewSession::answerQuestion(unsigned int quality) {
 }
 
 bool ReviewSession::start() {
+    currentQuestion = 1;
     bool anyQuestions = reviewModel->initialise(graph);
     if(anyQuestions) {
         showQuestion(reviewModel->nextQuestion()); // display the first question

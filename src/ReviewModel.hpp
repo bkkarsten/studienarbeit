@@ -38,6 +38,10 @@ public:
      * @brief Give an answer to the current question. This should call the algorithm's answered function.
      */
     virtual void answerQuestion(unsigned int quality) = 0;
+    /**
+     * @brief Returns the number of questions in the review model.
+     */
+    virtual int numQuestions() = 0;
 
 };
 

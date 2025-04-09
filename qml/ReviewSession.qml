@@ -14,6 +14,9 @@ Item {
     property bool revealed: false
     property bool reverse: false
 
+    property int totalQuestions: 0
+    property int currentQuestion: 1
+
     anchors.fill: parent
 
     Button {
@@ -35,6 +38,11 @@ Item {
             width: parent.width
             height: 40
             color: "transparent"
+
+            Text {
+                anchors.centerIn: parent
+                text: `Question ${currentQuestion} / ${totalQuestions}`
+            }
         }
 
         Row {

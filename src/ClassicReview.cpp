@@ -16,6 +16,7 @@ bool ClassicReview::initialise(const KnowledgeGraph& graph) {
             )});
         }
     }
+    numQ = openQuestions.size();
     return !openQuestions.isEmpty();
 }
 
@@ -42,4 +43,8 @@ void ClassicReview::answerQuestion(unsigned int quality) {
         againQuestions.append(currentQuestion);
     }
     currentQuestion = NO_QUESTION;
+}
+
+int ClassicReview::numQuestions() {
+    return numQ;
 }
