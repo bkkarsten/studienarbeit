@@ -287,5 +287,7 @@ void WindowManager::exitReview() {
 void WindowManager::answerQuestion(unsigned int quality) {
     if(reviewSession != nullptr) {
         reviewSession->answerQuestion(quality);
+        unsavedChanges = true;
+        updateWindowTitle();
     }
 }
