@@ -65,6 +65,7 @@ Qan.NodeItem {
         id: content
         objectName: "content"
         width: 0.5 * parent.width
+        anchors.centerIn: parent
     }
 
     onNodeDoubleClicked: contentEditDialog.open()

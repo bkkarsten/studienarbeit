@@ -2,6 +2,8 @@
 #include "config.hpp"
 
 #include "KnowledgeGraph.hpp"
+#include "ClassicReview.hpp"
+#include "SM2.hpp"
 
 #include <QQmlProperty>
 #include <QQmlContext>
@@ -70,7 +72,7 @@ WindowManager::WindowManager(QString defaultDir)
     savePrompt.addButton(QMessageBox::Discard);
 }
 
-void WindowManager::setView(QString source) {
+void WindowManager::setViewSource(QString source) {
     QObject* rootObject = engine.rootObjects().first();
     if (!rootObject) {
         showError("Root object not found.");
@@ -84,41 +86,50 @@ void WindowManager::setView(QString source) {
     QQmlProperty::write(contentLoader, "source", source);
 }
 
-void WindowManager::updateView() {
-    if(openedGraph) {
-        // setView("qrc:/file_loaded_placeholder.qml");
-        setView("qrc:/graphview.qml");
-    }
-    else {
-        setView("qrc:/no_file.qml");
+void WindowManager::setView(View view) {
+    currentView = view;
+    switch(currentView) {
+        case View::GRAPH:
+            setViewSource("qrc:/graph_or_review.qml");
+            QQmlProperty::write(qmlWindow->findChild<QQuickItem*>("graphOrReview"), "show", 0);
+            break;
+        case View::NONE:
+            setViewSource("qrc:/no_file.qml");
+            break;
+        case View::REVIEW:
+            setViewSource("qrc:/graph_or_review.qml");
+            QQmlProperty::write(qmlWindow->findChild<QQuickItem*>("graphOrReview"), "show", 1);
+            break;
+        case View::RESULTS:
+            setViewSource("qrc:/graph_or_review.qml");
+            QQmlProperty::write(qmlWindow->findChild<QQuickItem*>("graphOrReview"), "show", 2);
+            break;
+        default:
+            showError("Unknown view type.");
+            break;
     }
 }
 
 void WindowManager::updateGraph() {
-    if(openedGraph) {
-        graph = qobject_cast<KnowledgeGraph*>(engine.rootObjects().first()->findChild<QQuickItem*>("graph"));
-        if (graph) {
-            connect(graph, &KnowledgeGraph::customElementInserted, this, &changesMade);
-            connect(graph, &KnowledgeGraph::nodeRemoved, this, &changesMade);
-            connect(graph, &KnowledgeGraph::onEdgeRemoved, this, &changesMade);
-            connect(graph, &KnowledgeGraph::nodeMoved, this, &changesMade);
-            connect(graph, &KnowledgeGraph::nodeResized, this, &changesMade);
-            connect(graph, &KnowledgeGraph::elementChanged, this, &changesMade);
-        }
-    }
-    else {
-        graph = nullptr;
+    graph = qobject_cast<KnowledgeGraph*>(engine.rootObjects().first()->findChild<QQuickItem*>("graph"));
+    if (graph) {
+        connect(graph, &KnowledgeGraph::customElementInserted, this, &changesMade);
+        connect(graph, &KnowledgeGraph::nodeRemoved, this, &changesMade);
+        connect(graph, &KnowledgeGraph::onEdgeRemoved, this, &changesMade);
+        connect(graph, &KnowledgeGraph::nodeMoved, this, &changesMade);
+        connect(graph, &KnowledgeGraph::nodeResized, this, &changesMade);
+        connect(graph, &KnowledgeGraph::elementChanged, this, &changesMade);
     }
 }
 
 QString WindowManager::updateWindowTitle() {
     QString newTitle = QString(WINDOW_TITLE);
-    if(openedGraph) {
+    if(currentView != View::NONE) {
         newTitle.append(" - ");
         newTitle.append(openedFileName.isEmpty()? tr("unsaved Graph") : openedFileName.split("/").last());
-    }
-    if(unsavedChanges) {
-        newTitle.append("*");
+        if(unsavedChanges) {
+            newTitle.append("*");
+        }
     }
     qmlWindow->setTitle(newTitle);
     return newTitle;
@@ -136,6 +147,13 @@ void WindowManager::showError(QString message) {
 void WindowManager::showWarning(QString message) {
     errorMessage.setIcon(QMessageBox::Warning);
     errorMessage.setWindowTitle(tr("Warning"));
+    errorMessage.setText(message);
+    errorMessage.exec();
+}
+
+void WindowManager::showInfo(QString message) {
+    errorMessage.setIcon(QMessageBox::Information);
+    errorMessage.setWindowTitle(tr("Info"));
     errorMessage.setText(message);
     errorMessage.exec();
 }
@@ -158,8 +176,7 @@ void WindowManager::openFile() {
         }
         openedFile = true;
         openedFileName = QString::fromStdString(fileName);
-        openedGraph = true;
-        updateView();
+        setView(View::GRAPH);
         updateGraph();
         graph->loadFile(file);
         file.close();
@@ -172,11 +189,10 @@ void WindowManager::newFile() {
     SAVE_PROMPT_GUARD(
         openedFile = false;
         openedFileName.clear();
-        openedGraph = true;
         unsavedChanges = false;
         
+        setView(View::GRAPH);
         updateWindowTitle();
-        updateView();
         updateGraph();
 
         graph->clearGraph();
@@ -184,7 +200,7 @@ void WindowManager::newFile() {
 }
 
 void WindowManager::saveFile() {
-    if(!openedGraph) {
+    if(currentView == View::NONE) {
         return;
     }
     if(openedFile) {
@@ -197,7 +213,7 @@ void WindowManager::saveFile() {
 }
 
 void WindowManager::saveFileAs() {
-    if(!openedGraph) {
+    if(currentView == View::NONE) {
         return;
     }
     if(!saveAsDialog.exec()) {
@@ -225,10 +241,9 @@ void WindowManager::closeFile() {
     SAVE_PROMPT_GUARD(
         openedFile = false;
         openedFileName.clear();
-        openedGraph = false;
         unsavedChanges = false;
+        setView(View::NONE);
         updateWindowTitle();
-        updateView();
         updateGraph();
     )
 }
@@ -241,4 +256,45 @@ bool WindowManager::checkClose() {
 void WindowManager::changesMade() {
     unsavedChanges = true;
     updateWindowTitle();
+}
+
+void WindowManager::startReview() {
+    if(currentView == View::GRAPH) {
+        setView(View::REVIEW);
+        reviewSession = new ReviewSession(
+            std::make_unique<ClassicReview>(
+                std::make_unique<SM2>()
+            ),
+            *graph,
+            qmlWindow->findChild<QQuickItem*>("reviewUI")
+        );
+        connect(reviewSession, &ReviewSession::finished, this, [&](){
+            setView(View::RESULTS);
+            reviewSession->showResults(qmlWindow->findChild<QQuickItem*>("resultScreen"));
+        });
+        bool anyQuestions = reviewSession->start();
+        if(!anyQuestions) {
+            setView(View::GRAPH);
+            showInfo(tr("There is nothing to review."));
+        }
+    }
+    else {
+        showInfo(tr("You must open a graph before starting a review session."));
+    }
+}
+
+void WindowManager::exitReview() {
+    if(currentView == View::REVIEW || currentView == View::RESULTS){
+        delete reviewSession;
+        reviewSession = nullptr;
+        setView(View::GRAPH);
+    }
+}
+
+void WindowManager::answerQuestion(unsigned int quality) {
+    if(reviewSession != nullptr) {
+        reviewSession->answerQuestion(quality);
+        unsavedChanges = true;
+        updateWindowTitle();
+    }
 }

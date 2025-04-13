@@ -3,7 +3,7 @@
         <file>main.qml</file>
         <file>no_file.qml</file>
         <file>file_loaded_placeholder.qml</file>
-        <file>graphview.qml</file>
+        <file>Graphview.qml</file>
         <file>ConceptNode.qml</file>
         <file>Content.qml</file>
         <file>QuestionEdge.qml</file>
@@ -15,5 +15,9 @@
         <file>DraggableRect.qml</file>
         <file>ConnectorEdge.qml</file>
         <file>ExponentialSlider.qml</file>
+        <file>ReviewSession.qml</file>
+        <file>Switcher.qml</file>
+        <file>graph_or_review.qml</file>
+        <file>ResultScreen.qml</file>
     </qresource>
 </RCC>

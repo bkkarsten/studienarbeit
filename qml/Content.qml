@@ -3,15 +3,25 @@ import QtQuick.Controls 2.15
 
 // A column that can contain text and image content.
 Rectangle {
+    property var marginTop: 0
+    property var marginBottom: 0
     color: "white"
-    anchors.centerIn: parent
-    height: contentColumn.height
+    height: contentColumn.height + marginTop + marginBottom
 
     Column {
-        id: contentColumn
-        objectName: "contentColumn"
-        width: parent.width
+        anchors.fill: parent
+        Rectangle {
+            width: parent.width
+            height: marginTop
+            color: "transparent"
+        }
+        Column {
+            id: contentColumn
+            objectName: "contentColumn"
+            width: parent.width
+        }
     }
+    
 
     // Add a text element to the column.
     function addTextElement(text) {

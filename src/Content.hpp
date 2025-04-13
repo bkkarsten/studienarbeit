@@ -21,15 +21,16 @@ private:
      * @brief Splits the given string into a list of substrings depending on whether they are text or
      * the "img" command.
      */
-    QPair<QStringList, QStringList> separate(const QString& string);
-    /**
-     * @brief Seperates the text representation and applies it to the given content item of type Content.qml.
-     */
-    void apply(QQuickItem* contentItem);
+    QPair<QStringList, QStringList> separate(const QString& string) const;
 public:
     Content() = default;
 
     const QString& getTextForm() const { return textForm; }
+    
+    /**
+     * @brief Seperates the text representation and applies it to the given content item of type Content.qml.
+     */
+    void apply(QQuickItem* contentItem) const;
     
     void setTextForm(const QString& textForm, QQuickItem* contentItem = nullptr);
 };

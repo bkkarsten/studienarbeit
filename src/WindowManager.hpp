@@ -8,6 +8,8 @@
 #include <QMessageBox>
 #include <QQuickWindow>
 
+#include "ReviewSession.hpp"
+
 class KnowledgeGraph;
 
 /**
@@ -15,6 +17,11 @@ class KnowledgeGraph;
  */
 class WindowManager : public QObject {
     Q_OBJECT
+
+    enum View {
+        NONE, GRAPH, REVIEW, RESULTS
+    };
+
 private:
     // QML engine
     QQmlApplicationEngine engine;
@@ -34,19 +41,21 @@ private:
     bool openedFile;
     // The name of the file which has been opened
     QString openedFileName;
-    // Whether a graph is currently opened
-    bool openedGraph = false;
     // Whether there are any unsaved changes
     bool unsavedChanges = false;
+    // What is currently displayed in the window
+    View currentView = NONE;
+    // The review session object
+    ReviewSession* reviewSession;
     /**
      * @brief Sets the window's core QML content.
      * @param source The qml file to load
      */
-    void setView(QString source);
-    /** 
-     * @brief Updates the window's core QML content based on whether a graph is opened and which.
+    void setViewSource(QString source);
+    /**
+     * @brief Sets the window's core QML content.
      */
-    void updateView();
+    void setView(View view);
     /**
      * @brief Updates the window's title based on the opened file.
      * @return The new window title.
@@ -64,6 +73,10 @@ private:
      * @brief Shows a warning message box with the given message.
      */
     void showWarning(QString message);
+    /**
+     * @brief Shows an info message box with the given message.
+     */
+    void showInfo(QString message);
     /**
      * @brief Saves the graph to openedFile.
      */
@@ -116,6 +129,18 @@ public:
      * Called when closing the window.
      */
     Q_INVOKABLE bool checkClose();
+    /**
+     * @brief This will open the review view.
+     */
+    Q_INVOKABLE void startReview();
+    /**
+     * * @brief This will return from the review screen to the graph view.
+     */
+    Q_INVOKABLE void exitReview();
+    /**
+     * @brief This will answer the current question with the given quality.
+     */
+    Q_INVOKABLE void answerQuestion(unsigned int quality);
 
 public slots:
     void changesMade();

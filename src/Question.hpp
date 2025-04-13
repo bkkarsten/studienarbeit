@@ -25,6 +25,7 @@ private:
     virtual void emitContentChangedSignal() = 0;
     virtual void emitWeightChangedSignal() = 0;
 public: 
+    const Content& getContent() const { return content; }
     const QString& getContentTextForm() const { return content.getTextForm(); }
     void setContentTextForm(const QString& textForm);
 

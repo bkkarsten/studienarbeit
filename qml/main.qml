@@ -39,6 +39,13 @@ ApplicationWindow {
         }
         Menu {
             title: "Review"
+            Action {
+                text: "Classic"
+                onTriggered: manager.startReview()
+            }
+            Action {
+                text: "Graph based"
+            }
         }
     }
 

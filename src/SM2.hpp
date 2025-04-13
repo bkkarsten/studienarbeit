@@ -18,8 +18,8 @@ private:
     static constexpr double w1 = 0.28;
     static constexpr double w2 = -0.02;
 // interval sizes for new items
-    static constexpr uint64_t i1 = 1U;
-    static constexpr uint64_t i2 = 6U;
+    static constexpr int64_t i1 = 1;
+    static constexpr int64_t i2 = 6;
 // interval for easiness factor
     static constexpr double ef_min = 1.3;
     static constexpr double ef_max = 2.5;
@@ -27,23 +27,23 @@ private:
 
 public:
 
-    QString displayName() override { return "SM-2"; }
+    QString displayName() const override { return "SM-2"; }
 
-    unsigned int numAnswerQualities() override { return 6; }
+    unsigned int numAnswerQualities() const override { return 6; }
 
-    QStringList answerQualityNames() override;
+    QStringList answerQualityNames() const override;
 
-    QStringList answerQualityColours() override;
+    QStringList answerQualityColours() const override;
 
-    void initialise(Question*) override;
+    void initialise(Question*) const override;
 
-    void reset(Question*) override;
+    void reset(Question*) const override;
 
-    bool due(Question*) override;
+    bool due(Question*) const override;
 
-    float weight(Question*) override;
+    float weight(Question*) const override;
 
-    virtual bool answered(Question*, unsigned int) override;
+    virtual bool answered(Question*, unsigned int) const override;
 };
 
 

@@ -2,8 +2,9 @@
 
 #include <QDate>
 #include <algorithm>
+#include <cmath>
 
-QStringList SM2::answerQualityNames() {
+QStringList SM2::answerQualityNames() const {
     return {
         "Complete blackout",
         "Incorrect but remembered",
@@ -14,7 +15,7 @@ QStringList SM2::answerQualityNames() {
     };
 }
 
-QStringList SM2::answerQualityColours() {
+QStringList SM2::answerQualityColours() const {
     return {
         "black",
         "#d7090f",
@@ -25,21 +26,21 @@ QStringList SM2::answerQualityColours() {
     };
 }
 
-void SM2::reset(Question* question) {
+void SM2::reset(Question* question) const {
     boost::json::object& meta = question->getFlashcardMetadata();
-    meta["sm2_n"] = 0u;
-    meta["sm2_interval"] = 0u;
+    meta["sm2_n"] = 0;
+    meta["sm2_interval"] = 0;
     meta["sm2_easiness"] = 2.5;
     meta["sm2_duedate"] = QDate::currentDate().toString().toStdString();
 }
 
-void SM2::initialise(Question* question) {
+void SM2::initialise(Question* question) const {
     boost::json::object& meta = question->getFlashcardMetadata();
     if(!meta.contains("sm2_n")) {
-        meta["sm2_n"] = 0u;
+        meta["sm2_n"] = 0;
     }
     if(!meta.contains("sm2_interval")) {
-        meta["sm2_interval"] = 0u;
+        meta["sm2_interval"] = 0;
     }
     if(!meta.contains("sm2_duedate")) {
         meta["sm2_duedate"] = QDate::currentDate().toString().toStdString();
@@ -49,7 +50,7 @@ void SM2::initialise(Question* question) {
     }
 }
 
-bool SM2::due(Question* question) {
+bool SM2::due(Question* question) const {
     initialise(question);
     boost::json::object& meta = question->getFlashcardMetadata();
     QDate duedate = QDate::fromString(QString::fromStdString(std::string(meta["sm2_duedate"].as_string())));
@@ -60,13 +61,13 @@ bool SM2::due(Question* question) {
     return duedate <= QDate::currentDate();
 }
 
-float SM2::weight(Question* question) {
+float SM2::weight(Question* question) const {
     initialise(question);
     boost::json::object& meta = question->getFlashcardMetadata();
     QDate duedate = QDate::fromString(QString::fromStdString(std::string(meta["sm2_duedate"].as_string())));
     if(!duedate.isValid()) {
         qWarning() << "Invalid duedate encountered in SM2 algorithm!";
-        return false;
+        return NAN;
     }
     int daysLeft = QDate::currentDate().daysTo(duedate);
     if(daysLeft < 0) {
@@ -75,24 +76,24 @@ float SM2::weight(Question* question) {
     else return float(daysLeft);
 }
 
-bool SM2::answered(Question* question, unsigned int quality) {
+bool SM2::answered(Question* question, unsigned int quality) const {
     if(quality > 5) {
         throw std::invalid_argument("Quality level given to SM-2 must be between 0 and 5.");
     }
     initialise(question);
     boost::json::object& meta = question->getFlashcardMetadata();
-    uint64_t& n = meta["sm2_n"].as_uint64();
+    int64_t& n = meta["sm2_n"].as_int64();
     double& easiness = meta["sm2_easiness"].as_double();
-    uint64_t& interval = meta["sm2_interval"].as_uint64();
+    int64_t& interval = meta["sm2_interval"].as_int64();
     if(quality < 3) {
-        n = 0u;
-        interval = 0u;
+        n = 0;
+        interval = 0;
     }
     else if(quality >= 4) {    
         n++;
         easiness = std::clamp(easiness + (w0 + w1 * quality + w2 * quality * quality), 
             ef_min, ef_max);
-        interval = uint64_t(std::ceil((
+        interval = int64_t(std::ceil((
             n == 1 ? i1 : (
             n == 2 ? i2 :
             interval * easiness

@@ -17,6 +17,7 @@ Qan.EdgeItem {
         id: content
         objectName: "content"
         width: 100
+        anchors.centerIn: parent
 
         MouseArea {
             anchors.fill: parent
