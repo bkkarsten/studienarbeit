@@ -30,7 +30,7 @@ bool KnowledgeGraph::valid() {
 QSet<Question*> KnowledgeGraph::allQuestions() const {
     QSet<Question*> result;
     for(qan::Edge* edge : get_edges()) {
-        EdgeBase* edgeBase = dynamic_cast<QuestionEdge*>(edge);
+        EdgeBase* edgeBase = dynamic_cast<EdgeBase*>(edge);
         if(edgeBase) {
             result.insert(edgeBase->getQuestion());
         }
